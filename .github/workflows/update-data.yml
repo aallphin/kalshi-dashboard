@@ -24,6 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install requests cryptography
+          pip install git+https://github.com/Kalshi/kalshi-python.git
 
       - name: Fetch Kalshi data
         env:
