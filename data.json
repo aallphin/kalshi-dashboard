@@ -1,0 +1,31 @@
+{
+  "generated_at": "2026-01-29T00:00:00",
+  "generated_at_display": "January 29, 2026 at 12:00 AM",
+  "summary": {
+    "total_trades": 0,
+    "won": 0,
+    "lost": 0,
+    "open": 0,
+    "win_rate": 0,
+    "total_invested": 0,
+    "total_payout": 0,
+    "total_profit": 0,
+    "roi": 0,
+    "avg_bet": 0
+  },
+  "recent_7_days": {
+    "trades": 0,
+    "won": 0,
+    "lost": 0,
+    "open": 0,
+    "win_rate": 0,
+    "invested": 0,
+    "profit": 0,
+    "trades_list": []
+  },
+  "open_trades": [],
+  "by_sport": [],
+  "by_month": [],
+  "all_trades": [],
+  "_note": "This is placeholder data. Run the GitHub Action to fetch your real trading data."
+}

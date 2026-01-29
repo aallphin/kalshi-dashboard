@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalshi Performance Dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+            color: #e4e4e7;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #9333ea 0%, #7c3aed 50%, #6d28d9 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 60px rgba(147, 51, 234, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .header-info {
+            text-align: right;
+        }
+
+        .header-info p {
+            opacity: 0.95;
+            font-size: 0.85em;
+        }
+
+        /* Top stats bar - single row */
+        .top-stats-bar {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .top-stat {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 16px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .top-stat:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .top-stat h3 {
+            font-size: 0.7em;
+            font-weight: 500;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .top-stat .value {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #fafafa;
+        }
+
+        .top-stat .subtext {
+            color: #a1a1aa;
+            font-size: 0.75em;
+            margin-top: 2px;
+        }
+
+        .top-stat.positive .value {
+            color: #34d399;
+        }
+
+        .top-stat.negative .value {
+            color: #f87171;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 26, 46, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(147, 51, 234, 0.3);
+            border-top-color: #9333ea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            color: #f87171;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #a1a1aa;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tab.active {
+            background: rgba(147, 51, 234, 0.2);
+            border-color: rgba(147, 51, 234, 0.5);
+            color: #c084fc;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-card h3 {
+            font-size: 0.7em;
+            font-weight: 500;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .stat-card .value {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #fafafa;
+        }
+
+        .stat-card .subtext {
+            color: #a1a1aa;
+            margin-top: 3px;
+            font-size: 0.8em;
+        }
+
+        .stat-card.positive .value {
+            color: #34d399;
+        }
+
+        .stat-card.negative .value {
+            color: #f87171;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #fafafa;
+            margin-bottom: 18px;
+            letter-spacing: -0.5px;
+        }
+
+        .section.highlight {
+            background: rgba(147, 51, 234, 0.08);
+            border-color: rgba(147, 51, 234, 0.3);
+        }
+
+        .section.highlight h2 {
+            color: #c084fc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 0.75em;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e4e4e7;
+            font-size: 0.85em;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .clickable-row {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .clickable-row:hover {
+            background: rgba(147, 51, 234, 0.1) !important;
+        }
+
+        .positive {
+            color: #34d399;
+            font-weight: 600;
+        }
+
+        .negative {
+            color: #f87171;
+            font-weight: 600;
+        }
+
+        .trade-item {
+            padding: 14px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 3px solid #9333ea;
+            font-size: 0.9em;
+        }
+
+        .trade-item.won {
+            border-left-color: #34d399;
+        }
+
+        .trade-item.lost {
+            border-left-color: #f87171;
+        }
+
+        .trade-item.open {
+            border-left-color: #fbbf24;
+        }
+
+        .trade-item strong {
+            color: #c084fc;
+        }
+
+        .trade-item .matchup {
+            font-size: 1.05em;
+            color: #fafafa;
+            margin-bottom: 6px;
+        }
+
+        .trade-item .matchup .bet-side {
+            color: #c084fc;
+            font-weight: 600;
+        }
+
+        .trade-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .trade-details.show {
+            max-height: 3000px;
+        }
+
+        .expand-icon {
+            display: inline-block;
+            margin-left: 6px;
+            transition: transform 0.3s;
+            color: #9333ea;
+            font-size: 0.8em;
+        }
+
+        .expanded .expand-icon {
+            transform: rotate(90deg);
+        }
+
+        .open-trades-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-won {
+            background: rgba(52, 211, 153, 0.2);
+            color: #34d399;
+        }
+
+        .badge-lost {
+            background: rgba(248, 113, 113, 0.2);
+            color: #f87171;
+        }
+
+        .badge-open {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .search-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: white;
+            width: 100%;
+            max-width: 300px;
+            font-size: 0.9em;
+        }
+
+        .search-box::placeholder {
+            color: #71717a;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: rgba(147, 51, 234, 0.5);
+        }
+
+        @media (max-width: 900px) {
+            .top-stats-bar {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .header-info {
+                text-align: center;
+            }
+
+            .top-stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .top-stat {
+                padding: 12px;
+            }
+
+            .top-stat .value {
+                font-size: 1.2em;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            table {
+                font-size: 0.8em;
+            }
+
+            th, td {
+                padding: 8px 6px;
+            }
+
+            .section {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Loading dashboard...</p>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>📊 Kalshi Performance</h1>
+                <p id="totalTrades">Loading...</p>
+            </div>
+            <div class="header-info">
+                <p id="lastUpdated">Last updated: --</p>
+            </div>
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+        <!-- Top Stats Bar - Single Row -->
+        <div class="top-stats-bar" id="topStatsBar"></div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('overview')">Overview</button>
+            <button class="tab" onclick="switchTab('sports')">By Sport</button>
+            <button class="tab" onclick="switchTab('months')">By Month</button>
+            <button class="tab" onclick="switchTab('trades')">All Trades</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="tab-overview" class="tab-content active">
+            <div class="section highlight" id="recentSection" style="display: none;">
+                <h2>📅 Last 7 Days</h2>
+                <div class="summary-grid" id="recentCards"></div>
+                <div id="recentTrades"></div>
+            </div>
+
+            <div class="section" id="openTradesSection" style="display: none;">
+                <h2>🔄 Open Trades</h2>
+                <div class="open-trades-grid" id="openTrades"></div>
+            </div>
+        </div>
+
+        <!-- By Sport Tab -->
+        <div id="tab-sports" class="tab-content">
+            <div class="section">
+                <h2>Performance by Sport</h2>
+                <p style="color: #a1a1aa; margin-bottom: 12px; font-size: 0.85em;">Click any row to see individual trades</p>
+                <table id="sportTable">
+                    <thead>
+                        <tr>
+                            <th>Sport</th>
+                            <th>Trades</th>
+                            <th>Record</th>
+                            <th>Win %</th>
+                            <th>Net P/L</th>
+                            <th>Avg Bet</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sportTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- By Month Tab -->
+        <div id="tab-months" class="tab-content">
+            <div class="section">
+                <h2>Performance by Month</h2>
+                <p style="color: #a1a1aa; margin-bottom: 12px; font-size: 0.85em;">Click any row to see individual trades</p>
+                <table id="monthTable">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Trades</th>
+                            <th>Record</th>
+                            <th>Win %</th>
+                            <th>Net P/L</th>
+                            <th>Avg Bet</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monthTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- All Trades Tab -->
+        <div id="tab-trades" class="tab-content">
+            <div class="section">
+                <h2>All Trades</h2>
+                <div style="margin-bottom: 15px;">
+                    <input type="text" id="tradeSearch" class="search-box" placeholder="Search by ticker, team, or sport...">
+                </div>
+                <div id="allTradesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let dashboardData = null;
+        let expandedRows = new Set();
+
+        // Team abbreviation mappings
+        const TEAM_NAMES = {
+            // NHL
+            'ANA': 'Anaheim Ducks', 'ARI': 'Arizona Coyotes', 'BOS': 'Boston Bruins', 'BUF': 'Buffalo Sabres',
+            'CGY': 'Calgary Flames', 'CAR': 'Carolina Hurricanes', 'CHI': 'Chicago Blackhawks', 'COL': 'Colorado Avalanche',
+            'CBJ': 'Columbus Blue Jackets', 'DAL': 'Dallas Stars', 'DET': 'Detroit Red Wings', 'EDM': 'Edmonton Oilers',
+            'FLA': 'Florida Panthers', 'LA': 'Los Angeles Kings', 'LAK': 'Los Angeles Kings', 'MIN': 'Minnesota Wild',
+            'MTL': 'Montreal Canadiens', 'NSH': 'Nashville Predators', 'NJ': 'New Jersey Devils', 'NJD': 'New Jersey Devils',
+            'NYI': 'New York Islanders', 'NYR': 'New York Rangers', 'OTT': 'Ottawa Senators', 'PHI': 'Philadelphia Flyers',
+            'PIT': 'Pittsburgh Penguins', 'SJ': 'San Jose Sharks', 'SJS': 'San Jose Sharks', 'SEA': 'Seattle Kraken',
+            'STL': 'St. Louis Blues', 'TB': 'Tampa Bay Lightning', 'TBL': 'Tampa Bay Lightning', 'TOR': 'Toronto Maple Leafs',
+            'VAN': 'Vancouver Canucks', 'VGK': 'Vegas Golden Knights', 'WSH': 'Washington Capitals', 'WPG': 'Winnipeg Jets',
+            // NFL
+            'KC': 'Kansas City Chiefs', 'BUF': 'Buffalo Bills', 'PHI': 'Philadelphia Eagles', 'SF': 'San Francisco 49ers',
+            'DAL': 'Dallas Cowboys', 'MIA': 'Miami Dolphins', 'BAL': 'Baltimore Ravens', 'CIN': 'Cincinnati Bengals',
+            'DET': 'Detroit Lions', 'GB': 'Green Bay Packers', 'LAR': 'Los Angeles Rams', 'LAC': 'Los Angeles Chargers',
+            'MIN': 'Minnesota Vikings', 'NO': 'New Orleans Saints', 'NYG': 'New York Giants', 'NYJ': 'New York Jets',
+            'SEA': 'Seattle Seahawks', 'TB': 'Tampa Bay Buccaneers', 'WAS': 'Washington Commanders', 'ATL': 'Atlanta Falcons',
+            'CAR': 'Carolina Panthers', 'CHI': 'Chicago Bears', 'CLE': 'Cleveland Browns', 'DEN': 'Denver Broncos',
+            'HOU': 'Houston Texans', 'IND': 'Indianapolis Colts', 'JAX': 'Jacksonville Jaguars', 'LV': 'Las Vegas Raiders',
+            'NE': 'New England Patriots', 'PIT': 'Pittsburgh Steelers', 'TEN': 'Tennessee Titans', 'ARI': 'Arizona Cardinals',
+            // NBA
+            'ATL': 'Atlanta Hawks', 'BOS': 'Boston Celtics', 'BKN': 'Brooklyn Nets', 'CHA': 'Charlotte Hornets',
+            'CHI': 'Chicago Bulls', 'CLE': 'Cleveland Cavaliers', 'DAL': 'Dallas Mavericks', 'DEN': 'Denver Nuggets',
+            'DET': 'Detroit Pistons', 'GSW': 'Golden State Warriors', 'GS': 'Golden State Warriors', 'HOU': 'Houston Rockets',
+            'IND': 'Indiana Pacers', 'LAC': 'LA Clippers', 'LAL': 'LA Lakers', 'MEM': 'Memphis Grizzlies',
+            'MIA': 'Miami Heat', 'MIL': 'Milwaukee Bucks', 'MIN': 'Minnesota Timberwolves', 'NOP': 'New Orleans Pelicans',
+            'NYK': 'New York Knicks', 'OKC': 'Oklahoma City Thunder', 'ORL': 'Orlando Magic', 'PHI': 'Philadelphia 76ers',
+            'PHX': 'Phoenix Suns', 'POR': 'Portland Trail Blazers', 'SAC': 'Sacramento Kings', 'SAS': 'San Antonio Spurs',
+            'TOR': 'Toronto Raptors', 'UTA': 'Utah Jazz', 'WAS': 'Washington Wizards',
+            // MLB
+            'ARI': 'Arizona Diamondbacks', 'ATL': 'Atlanta Braves', 'BAL': 'Baltimore Orioles', 'BOS': 'Boston Red Sox',
+            'CHC': 'Chicago Cubs', 'CWS': 'Chicago White Sox', 'CIN': 'Cincinnati Reds', 'CLE': 'Cleveland Guardians',
+            'COL': 'Colorado Rockies', 'DET': 'Detroit Tigers', 'HOU': 'Houston Astros', 'KC': 'Kansas City Royals',
+            'LAA': 'Los Angeles Angels', 'LAD': 'Los Angeles Dodgers', 'MIA': 'Miami Marlins', 'MIL': 'Milwaukee Brewers',
+            'MIN': 'Minnesota Twins', 'NYM': 'New York Mets', 'NYY': 'New York Yankees', 'OAK': 'Oakland Athletics',
+            'PHI': 'Philadelphia Phillies', 'PIT': 'Pittsburgh Pirates', 'SD': 'San Diego Padres', 'SEA': 'Seattle Mariners',
+            'SF': 'San Francisco Giants', 'STL': 'St. Louis Cardinals', 'TB': 'Tampa Bay Rays', 'TEX': 'Texas Rangers',
+            'TOR': 'Toronto Blue Jays', 'WAS': 'Washington Nationals'
+        };
+
+        function parseTickerForMatchup(ticker, side) {
+            // Try to extract teams/matchup from ticker
+            // Common formats: KXNHL-26JAN28-BUF-OTT, KXNFL-26JAN26-KC-BUF, KXNHL-PARLAY-26JAN27
+
+            const upperTicker = ticker.toUpperCase();
+
+            // Check for parlay
+            if (upperTicker.includes('PARLAY') || upperTicker.includes('BUNDLE') || upperTicker.includes('MULTI')) {
+                return { type: 'parlay', display: 'Parlay Bet' };
+            }
+
+            // Try to find team codes (2-3 letter codes)
+            const parts = ticker.split('-');
+            const teams = [];
+
+            for (const part of parts) {
+                const upperPart = part.toUpperCase();
+                if (TEAM_NAMES[upperPart]) {
+                    teams.push(upperPart);
+                }
+            }
+
+            if (teams.length >= 2) {
+                // Got a matchup like BUF vs OTT
+                const team1 = TEAM_NAMES[teams[0]] || teams[0];
+                const team2 = TEAM_NAMES[teams[1]] || teams[1];
+                const betOn = side.toLowerCase() === 'yes' ? team1 : team2;
+                return {
+                    type: 'matchup',
+                    team1: team1,
+                    team2: team2,
+                    betOn: betOn,
+                    display: `${team1} vs ${team2}`,
+                    betDisplay: `Bet: ${betOn}`
+                };
+            } else if (teams.length === 1) {
+                // Single team reference
+                const team = TEAM_NAMES[teams[0]] || teams[0];
+                return {
+                    type: 'single',
+                    team: team,
+                    display: team,
+                    betDisplay: `${side.toUpperCase()} on ${team}`
+                };
+            }
+
+            // Check for player names or other patterns (like GIANNIS)
+            const playerPatterns = ['GIANNIS', 'LEBRON', 'CURRY', 'MCDAVID', 'MAHOMES', 'OHTANI'];
+            for (const player of playerPatterns) {
+                if (upperTicker.includes(player)) {
+                    return {
+                        type: 'player',
+                        player: player.charAt(0) + player.slice(1).toLowerCase(),
+                        display: `${player.charAt(0) + player.slice(1).toLowerCase()} Prop`,
+                        betDisplay: `${side.toUpperCase()}`
+                    };
+                }
+            }
+
+            // Fallback - just return the ticker cleaned up
+            return {
+                type: 'unknown',
+                display: ticker,
+                betDisplay: side.toUpperCase()
+            };
+        }
+
+        async function loadData() {
+            const overlay = document.getElementById('loadingOverlay');
+            const errorMsg = document.getElementById('errorMessage');
+
+            try {
+                const response = await fetch('data.json');
+                if (!response.ok) {
+                    throw new Error('Could not load data. Please wait for the first data sync.');
+                }
+                dashboardData = await response.json();
+                renderDashboard();
+                overlay.classList.add('hidden');
+            } catch (error) {
+                overlay.classList.add('hidden');
+                errorMsg.textContent = error.message;
+                errorMsg.style.display = 'block';
+                console.error('Error loading data:', error);
+            }
+        }
+
+        function formatMoney(value, showSign = false) {
+            const formatted = Math.abs(value).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            if (showSign) {
+                return value >= 0 ? `+$${formatted}` : `-$${formatted}`;
+            }
+            return `$${formatted}`;
+        }
+
+        function renderDashboard() {
+            if (!dashboardData) return;
+
+            const s = dashboardData.summary;
+
+            document.getElementById('totalTrades').textContent = `${s.total_trades} Total Trades`;
+            document.getElementById('lastUpdated').textContent = `Updated: ${dashboardData.generated_at_display}`;
+
+            // Top stats bar - single row
+            const topStatsHtml = `
+                <div class="top-stat">
+                    <h3>Record</h3>
+                    <div class="value">${s.won} - ${s.lost}</div>
+                    <div class="subtext">${s.win_rate}% Win</div>
+                </div>
+                <div class="top-stat">
+                    <h3>Total Bet</h3>
+                    <div class="value">${formatMoney(s.total_invested)}</div>
+                </div>
+                <div class="top-stat">
+                    <h3>Total Payout</h3>
+                    <div class="value">${formatMoney(s.total_payout)}</div>
+                </div>
+                <div class="top-stat ${s.total_profit >= 0 ? 'positive' : 'negative'}">
+                    <h3>Net P/L</h3>
+                    <div class="value">${formatMoney(s.total_profit, true)}</div>
+                </div>
+                <div class="top-stat">
+                    <h3>ROI</h3>
+                    <div class="value">${s.roi}%</div>
+                </div>
+                <div class="top-stat">
+                    <h3>Avg Bet</h3>
+                    <div class="value">${formatMoney(s.avg_bet)}</div>
+                </div>
+            `;
+            document.getElementById('topStatsBar').innerHTML = topStatsHtml;
+
+            // Recent 7 days
+            const r = dashboardData.recent_7_days;
+            if (r && r.trades > 0) {
+                document.getElementById('recentSection').style.display = 'block';
+                document.getElementById('recentCards').innerHTML = `
+                    <div class="stat-card">
+                        <h3>Trades</h3>
+                        <div class="value">${r.trades}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Record</h3>
+                        <div class="value">${r.won} - ${r.lost}</div>
+                        <div class="subtext">${r.win_rate}% Win</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Bet</h3>
+                        <div class="value">${formatMoney(r.invested)}</div>
+                    </div>
+                    <div class="stat-card ${r.profit >= 0 ? 'positive' : 'negative'}">
+                        <h3>Net P/L</h3>
+                        <div class="value">${formatMoney(r.profit, true)}</div>
+                    </div>
+                `;
+
+                const recentTradesHtml = (r.trades_list || []).slice(0, 10).map(t => renderTradeItem(t, true)).join('');
+                document.getElementById('recentTrades').innerHTML = recentTradesHtml;
+            }
+
+            // Open trades
+            const openTrades = dashboardData.open_trades || [];
+            if (openTrades.length > 0) {
+                document.getElementById('openTradesSection').style.display = 'block';
+                document.getElementById('openTrades').innerHTML = openTrades.map(t => {
+                    const matchup = parseTickerForMatchup(t.ticker, t.side);
+                    return `
+                        <div class="trade-item open">
+                            <div class="matchup">${matchup.display} <span class="bet-side">(${matchup.betDisplay || t.side.toUpperCase()})</span></div>
+                            <div><strong>${t.sport}</strong> | ${t.count} contracts @ ${formatMoney(t.price_dollars)} = ${formatMoney(t.cost)}</div>
+                            <div style="font-size: 0.8em; color: #71717a; margin-top: 4px;">${t.ticker}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            renderSportTable();
+            renderMonthTable();
+            renderAllTrades();
+        }
+
+        function renderTradeItem(t, showMatchup = false) {
+            const statusClass = t.outcome_status || 'unknown';
+            const profitClass = t.profit > 0 ? 'positive' : t.profit < 0 ? 'negative' : '';
+            const matchup = parseTickerForMatchup(t.ticker, t.side);
+
+            if (showMatchup && matchup.type !== 'unknown') {
+                return `
+                    <div class="trade-item ${statusClass}">
+                        <div class="matchup">${matchup.display} <span class="bet-side">(${matchup.betDisplay || t.side.toUpperCase()})</span></div>
+                        <div><strong>${t.sport}</strong> | ${t.month || 'Unknown'} | ${t.count} @ ${formatMoney(t.price_dollars)} = ${formatMoney(t.cost)}</div>
+                        <div style="font-size: 0.8em; color: #71717a; margin-top: 4px;">
+                            ${t.ticker} | <span class="badge badge-${statusClass}">${statusClass}</span> |
+                            <span class="${profitClass}">P/L: ${formatMoney(t.profit, true)}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="trade-item ${statusClass}">
+                    <div><strong>${t.sport}</strong> | ${t.month || 'Unknown'} | ${t.side.toUpperCase()} | ${t.count} @ ${formatMoney(t.price_dollars)} = ${formatMoney(t.cost)}</div>
+                    <div style="font-size: 0.85em; color: #a1a1aa; margin-top: 4px;">
+                        ${t.ticker} | <span class="badge badge-${statusClass}">${statusClass}</span> |
+                        <span class="${profitClass}">P/L: ${formatMoney(t.profit, true)}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSportTable() {
+            const tbody = document.getElementById('sportTableBody');
+            tbody.innerHTML = (dashboardData.by_sport || []).map((s, i) => {
+                const profitClass = s.profit > 0 ? 'positive' : s.profit < 0 ? 'negative' : '';
+                const rowId = `sport-${i}`;
+                const trades = s.trades_list || [];
+                return `
+                    <tr class="clickable-row ${expandedRows.has(rowId) ? 'expanded' : ''}" onclick="toggleDetails('${rowId}')">
+                        <td><strong>${s.sport}</strong> <span class="expand-icon">▶</span></td>
+                        <td>${s.trades}</td>
+                        <td>${s.won} - ${s.lost}</td>
+                        <td>${s.win_rate}%</td>
+                        <td class="${profitClass}">${formatMoney(s.profit, true)}</td>
+                        <td>${formatMoney(s.avg_bet)}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="padding: 0; border: none;">
+                            <div class="trade-details ${expandedRows.has(rowId) ? 'show' : ''}" id="${rowId}">
+                                <div style="padding: 12px;">
+                                    ${trades.slice(0, 25).map(t => renderTradeItem(t, true)).join('')}
+                                    ${trades.length > 25 ? `<p style="color: #a1a1aa; padding: 10px;">...and ${trades.length - 25} more trades</p>` : ''}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderMonthTable() {
+            const tbody = document.getElementById('monthTableBody');
+            tbody.innerHTML = (dashboardData.by_month || []).map((m, i) => {
+                const profitClass = m.profit > 0 ? 'positive' : m.profit < 0 ? 'negative' : '';
+                const rowId = `month-${i}`;
+                const trades = m.trades_list || [];
+                return `
+                    <tr class="clickable-row ${expandedRows.has(rowId) ? 'expanded' : ''}" onclick="toggleDetails('${rowId}')">
+                        <td><strong>${m.month}</strong> <span class="expand-icon">▶</span></td>
+                        <td>${m.trades}</td>
+                        <td>${m.won} - ${m.lost}</td>
+                        <td>${m.win_rate}%</td>
+                        <td class="${profitClass}">${formatMoney(m.profit, true)}</td>
+                        <td>${formatMoney(m.avg_bet)}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="padding: 0; border: none;">
+                            <div class="trade-details ${expandedRows.has(rowId) ? 'show' : ''}" id="${rowId}">
+                                <div style="padding: 12px;">
+                                    ${trades.slice(0, 25).map(t => renderTradeItem(t, true)).join('')}
+                                    ${trades.length > 25 ? `<p style="color: #a1a1aa; padding: 10px;">...and ${trades.length - 25} more trades</p>` : ''}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderAllTrades(filter = '') {
+            const container = document.getElementById('allTradesList');
+            let trades = dashboardData.all_trades || [];
+
+            if (filter) {
+                const f = filter.toLowerCase();
+                trades = trades.filter(t => {
+                    const matchup = parseTickerForMatchup(t.ticker, t.side);
+                    return t.ticker.toLowerCase().includes(f) ||
+                           t.sport.toLowerCase().includes(f) ||
+                           (matchup.display && matchup.display.toLowerCase().includes(f));
+                });
+            }
+
+            container.innerHTML = trades.slice(0, 100).map(t => renderTradeItem(t, true)).join('');
+
+            if (trades.length > 100) {
+                container.innerHTML += `<p style="color: #a1a1aa; padding: 15px; text-align: center;">Showing 100 of ${trades.length} trades. Use search to filter.</p>`;
+            }
+
+            if (trades.length === 0) {
+                container.innerHTML = `<p style="color: #a1a1aa; padding: 15px; text-align: center;">No trades found.</p>`;
+            }
+        }
+
+        function toggleDetails(rowId) {
+            const details = document.getElementById(rowId);
+            const row = details.closest('tr').previousElementSibling;
+
+            if (expandedRows.has(rowId)) {
+                expandedRows.delete(rowId);
+                details.classList.remove('show');
+                row.classList.remove('expanded');
+            } else {
+                expandedRows.add(rowId);
+                details.classList.add('show');
+                row.classList.add('expanded');
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        document.getElementById('tradeSearch').addEventListener('input', (e) => {
+            renderAllTrades(e.target.value);
+        });
+
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>
