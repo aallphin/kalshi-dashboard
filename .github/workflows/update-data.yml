@@ -22,16 +22,13 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          pip install requests cryptography
-          pip install git+https://github.com/Kalshi/kalshi-python.git
+        run: pip install requests cryptography pycryptodome
 
       - name: Fetch Kalshi data
         env:
           KALSHI_API_KEY_ID: ${{ secrets.KALSHI_API_KEY_ID }}
           KALSHI_PRIVATE_KEY: ${{ secrets.KALSHI_PRIVATE_KEY }}
-        run: |
-          python fetch_data.py
+        run: python fetch_data.py
 
       - name: Commit and push if changed
         run: |
