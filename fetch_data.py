@@ -212,15 +212,16 @@ def calculate_outcome(trade: dict, market_info) -> dict:
 def fetch_and_save_data():
     """Main function to fetch data and save JSON"""
 
-    # Get credentials from environment variables
+# Get credentials from environment variables
     api_key_id = os.environ.get('KALSHI_API_KEY_ID')
-    private_key = os.environ.get('KALSHI_PRIVATE_KEY')
+    private_key_b64 = os.environ.get('KALSHI_PRIVATE_KEY_B64')
 
-    if not api_key_id or not private_key:
-        raise ValueError("Missing KALSHI_API_KEY_ID or KALSHI_PRIVATE_KEY environment variables")
+    if not api_key_id or not private_key_b64:
+        raise ValueError("Missing KALSHI_API_KEY_ID or KALSHI_PRIVATE_KEY_B64 environment variables")
 
-    # Fix potential newline issues in private key from environment variable
-    private_key = private_key.replace('\\n', '\n')
+    # Decode base64-encoded private key
+    import base64
+    private_key = base64.b64decode(private_key_b64).decode('utf-8')
 
     print("Connecting to Kalshi API...")
     client = KalshiClient(api_key_id, private_key)
