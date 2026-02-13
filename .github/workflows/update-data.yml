@@ -1,4 +1,4 @@
-yamlname: Update Kalshi Data
+name: Update Kalshi Data
 
 on:
   schedule:
@@ -38,4 +38,3 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add data.json
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update trading data $(date +'%Y-%m-%d %H:%M')" && git push)
-
