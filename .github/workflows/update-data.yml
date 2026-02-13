@@ -23,7 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install kalshi-python
+          pip install kalshi-python cryptography
 
       - name: Fetch Kalshi data
         env:
