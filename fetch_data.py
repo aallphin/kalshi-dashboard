@@ -123,7 +123,7 @@ def fetch_and_save_data():
     # Create client
     client = kalshi_python.KalshiClient(config)
     portfolio_api = kalshi_python.PortfolioApi(api_client=client)
-    market_api = kalshi_python.MarketApi(api_client=client)
+    markets_api = kalshi_python.MarketsApi(api_client=client)
 
     print("Successfully connected!")
 
@@ -186,7 +186,7 @@ def fetch_and_save_data():
         ticker = trade['ticker']
         if ticker not in market_cache:
             try:
-                market_cache[ticker] = market_api.get_market(ticker)
+                market_cache[ticker] = markets_api.get_market(ticker)
                 time.sleep(0.05)  # Rate limiting
             except Exception as e:
                 print(f"  Warning: Could not fetch market {ticker}: {e}")
@@ -202,133 +202,4 @@ def fetch_and_save_data():
         if trade['trade_date']:
             try:
                 dt = datetime.fromisoformat(trade['trade_date'])
-                trade['month'] = dt.strftime('%b %Y')
-                trade['month_sort'] = dt.strftime('%Y-%m')
-            except:
-                trade['month'] = 'Unknown'
-                trade['month_sort'] = 'Unknown'
-        else:
-            trade['month'] = 'Unknown'
-            trade['month_sort'] = 'Unknown'
-
-    # Organize data
-    by_sport = defaultdict(list)
-    by_month = defaultdict(list)
-
-    for trade in all_trades:
-        by_sport[trade['sport']].append(trade)
-        if trade['month_sort'] != 'Unknown':
-            by_month[trade['month_sort']].append(trade)
-
-    # Calculate summary stats
-    total_cost = sum(t['cost'] for t in all_trades)
-    total_payout = sum(t['payout'] for t in all_trades)
-    total_profit = sum(t['profit'] for t in all_trades)
-
-    won = len([t for t in all_trades if t['outcome_status'] == 'won'])
-    lost = len([t for t in all_trades if t['outcome_status'] == 'lost'])
-    open_count = len([t for t in all_trades if t['outcome_status'] == 'open'])
-
-    win_rate = (won / (won + lost) * 100) if (won + lost) > 0 else 0
-    roi = (total_profit / total_cost * 100) if total_cost > 0 else 0
-    avg_bet = total_cost / len(all_trades) if all_trades else 0
-
-    # Recent 7 days
-    seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-    recent_trades = []
-    for t in all_trades:
-        if t.get('trade_date'):
-            try:
-                dt = datetime.fromisoformat(t['trade_date'])
-                if dt.tzinfo is None:
-                    dt = dt.replace(tzinfo=timezone.utc)
-                if dt >= seven_days_ago:
-                    recent_trades.append(t)
-            except:
-                pass
-
-    recent_won = len([t for t in recent_trades if t['outcome_status'] == 'won'])
-    recent_lost = len([t for t in recent_trades if t['outcome_status'] == 'lost'])
-    recent_stats = {
-        'trades': len(recent_trades),
-        'won': recent_won,
-        'lost': recent_lost,
-        'open': len([t for t in recent_trades if t['outcome_status'] == 'open']),
-        'win_rate': round((recent_won / (recent_won + recent_lost) * 100) if (recent_won + recent_lost) > 0 else 0, 1),
-        'invested': round(sum(t['cost'] for t in recent_trades), 2),
-        'profit': round(sum(t['profit'] for t in recent_trades), 2),
-        'trades_list': sorted(recent_trades, key=lambda x: x.get('trade_date') or '', reverse=True)[:20]
-    }
-
-    # Sport stats
-    sport_stats = []
-    for sport, trades in sorted(by_sport.items(), key=lambda x: sum(t['profit'] for t in x[1]), reverse=True):
-        s_won = len([t for t in trades if t['outcome_status'] == 'won'])
-        s_lost = len([t for t in trades if t['outcome_status'] == 'lost'])
-        s_cost = sum(t['cost'] for t in trades)
-        sport_stats.append({
-            'sport': sport,
-            'trades': len(trades),
-            'won': s_won,
-            'lost': s_lost,
-            'win_rate': round((s_won / (s_won + s_lost) * 100) if (s_won + s_lost) > 0 else 0, 1),
-            'invested': round(s_cost, 2),
-            'profit': round(sum(t['profit'] for t in trades), 2),
-            'avg_bet': round(s_cost / len(trades), 2) if trades else 0,
-            'trades_list': sorted(trades, key=lambda x: x.get('trade_date') or '', reverse=True)
-        })
-
-    # Month stats
-    month_stats = []
-    for month_sort in sorted(by_month.keys()):
-        trades = by_month[month_sort]
-        m_won = len([t for t in trades if t['outcome_status'] == 'won'])
-        m_lost = len([t for t in trades if t['outcome_status'] == 'lost'])
-        m_cost = sum(t['cost'] for t in trades)
-        month_stats.append({
-            'month': trades[0].get('month', month_sort) if trades else month_sort,
-            'month_sort': month_sort,
-            'trades': len(trades),
-            'won': m_won,
-            'lost': m_lost,
-            'win_rate': round((m_won / (m_won + m_lost) * 100) if (m_won + m_lost) > 0 else 0, 1),
-            'invested': round(m_cost, 2),
-            'profit': round(sum(t['profit'] for t in trades), 2),
-            'avg_bet': round(m_cost / len(trades), 2) if trades else 0,
-            'trades_list': sorted(trades, key=lambda x: x.get('trade_date') or '', reverse=True)
-        })
-
-    # Build final data
-    dashboard_data = {
-        'generated_at': datetime.now().isoformat(),
-        'generated_at_display': datetime.now().strftime('%B %d, %Y at %I:%M %p'),
-        'summary': {
-            'total_trades': len(all_trades),
-            'won': won,
-            'lost': lost,
-            'open': open_count,
-            'win_rate': round(win_rate, 1),
-            'total_invested': round(total_cost, 2),
-            'total_payout': round(total_payout, 2),
-            'total_profit': round(total_profit, 2),
-            'roi': round(roi, 1),
-            'avg_bet': round(avg_bet, 2)
-        },
-        'recent_7_days': recent_stats,
-        'open_trades': [t for t in all_trades if t['outcome_status'] == 'open'],
-        'by_sport': sport_stats,
-        'by_month': month_stats,
-        'all_trades': sorted(all_trades, key=lambda x: x.get('trade_date') or '', reverse=True)
-    }
-
-    # Save JSON
-    with open('data.json', 'w') as f:
-        json.dump(dashboard_data, f, indent=2, default=str)
-
-    print(f"\n✓ Data saved to data.json")
-    print(f"  Record: {won}W - {lost}L ({win_rate:.1f}%)")
-    print(f"  Net Profit: ${total_profit:+,.2f}")
-
-
-if __name__ == "__main__":
-    fetch_and_save_data()
+                trade['month'] = dt.str
