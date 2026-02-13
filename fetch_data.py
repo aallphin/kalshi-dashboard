@@ -9,117 +9,7 @@ import json
 import time
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict
-
-# Try to use kalshi_python if available, otherwise use REST API
-try:
-    import kalshi_python
-    USE_KALSHI_PYTHON = True
-except ImportError:
-    USE_KALSHI_PYTHON = False
-    import requests
-    from cryptography.hazmat.primitives import hashes, serialization
-    from cryptography.hazmat.primitives.asymmetric import padding
-    from cryptography.hazmat.backends import default_backend
-    import base64
-
-
-class KalshiAPIRest:
-    """Fallback REST API client"""
-
-    def __init__(self, api_key_id: str, private_key_pem: str):
-        self.api_key_id = api_key_id
-        self.base_url = "https://api.elections.kalshi.com/trade-api/v2"
-
-        # Load the private key
-        self.private_key = serialization.load_pem_private_key(
-            private_key_pem.encode(),
-            password=None,
-            backend=default_backend()
-        )
-
-    def _sign_request(self, method: str, path: str, timestamp: str) -> str:
-        """Sign a request using RSA-SHA256"""
-        message = f"{timestamp}{method}{path}".encode()
-        signature = self.private_key.sign(
-            message,
-            padding.PKCS1v15(),
-            hashes.SHA256()
-        )
-        return base64.b64encode(signature).decode()
-
-    def _make_request(self, method: str, endpoint: str, params: dict = None) -> dict:
-        """Make an authenticated request to the Kalshi API"""
-        timestamp = str(int(time.time() * 1000))
-        path = f"/trade-api/v2{endpoint}"
-
-        # Build query string
-        if params:
-            query_parts = []
-            for k, v in params.items():
-                if v is not None:
-                    query_parts.append(f"{k}={v}")
-            if query_parts:
-                path = f"{path}?{'&'.join(query_parts)}"
-
-        signature = self._sign_request(method, path, timestamp)
-
-        headers = {
-            "KALSHI-ACCESS-KEY": self.api_key_id,
-            "KALSHI-ACCESS-SIGNATURE": signature,
-            "KALSHI-ACCESS-TIMESTAMP": timestamp,
-            "Content-Type": "application/json"
-        }
-
-        url = f"{self.base_url}{endpoint}"
-
-        if method == "GET":
-            response = requests.get(url, headers=headers, params=params)
-        else:
-            response = requests.post(url, headers=headers, json=params)
-
-        response.raise_for_status()
-        return response.json()
-
-
-class KalshiClient:
-    """Wrapper that uses kalshi_python if available, otherwise REST"""
-
-    def __init__(self, api_key_id: str, private_key_pem: str):
-        self.api_key_id = api_key_id
-        self.private_key_pem = private_key_pem
-
-        if USE_KALSHI_PYTHON:
-            print("Using kalshi_python package...")
-            config = kalshi_python.Configuration()
-            config.host = 'https://api.elections.kalshi.com/trade-api/v2'
-            config.api_key_id = api_key_id
-            config.private_key_pem = private_key_pem
-            self.client = kalshi_python.KalshiClient(config)
-            self.portfolio_api = kalshi_python.PortfolioApi(api_client=self.client)
-        else:
-            print("Using REST API...")
-            self.rest_client = KalshiAPIRest(api_key_id, private_key_pem)
-
-    def get_fills(self, cursor=None, limit=100):
-        """Get trade fills"""
-        if USE_KALSHI_PYTHON:
-            if cursor:
-                return self.portfolio_api.get_fills(cursor=cursor, limit=limit)
-            else:
-                return self.portfolio_api.get_fills(limit=limit)
-        else:
-            params = {"limit": limit}
-            if cursor:
-                params["cursor"] = cursor
-            return self.rest_client._make_request("GET", "/portfolio/fills", params)
-
-    def get_market(self, ticker: str):
-        """Get market details"""
-        if USE_KALSHI_PYTHON:
-            market_api = kalshi_python.MarketApi(api_client=self.client)
-            return market_api.get_market(ticker)
-        else:
-            return self.rest_client._make_request("GET", f"/markets/{ticker}")
+import kalshi_python
 
 
 def categorize_sport(ticker: str) -> str:
@@ -212,19 +102,30 @@ def calculate_outcome(trade: dict, market_info) -> dict:
 def fetch_and_save_data():
     """Main function to fetch data and save JSON"""
 
-# Get credentials from environment variables
+    # Get credentials from environment variables
     api_key_id = os.environ.get('KALSHI_API_KEY_ID')
-    private_key_b64 = os.environ.get('KALSHI_PRIVATE_KEY_B64')
+    private_key = os.environ.get('KALSHI_PRIVATE_KEY')
 
-    if not api_key_id or not private_key_b64:
-        raise ValueError("Missing KALSHI_API_KEY_ID or KALSHI_PRIVATE_KEY_B64 environment variables")
+    if not api_key_id or not private_key:
+        raise ValueError("Missing KALSHI_API_KEY_ID or KALSHI_PRIVATE_KEY environment variables")
 
-    # Decode base64-encoded private key
-    import base64
-    private_key = base64.b64decode(private_key_b64).decode('utf-8')
+    # Fix potential newline issues in private key from environment variable
+    private_key = private_key.replace('\\n', '\n')
 
     print("Connecting to Kalshi API...")
-    client = KalshiClient(api_key_id, private_key)
+
+    # Configure the API using kalshi_python
+    config = kalshi_python.Configuration()
+    config.host = 'https://api.elections.kalshi.com/trade-api/v2'
+    config.api_key_id = api_key_id
+    config.private_key_pem = private_key
+
+    # Create client
+    client = kalshi_python.KalshiClient(config)
+    portfolio_api = kalshi_python.PortfolioApi(api_client=client)
+    market_api = kalshi_python.MarketApi(api_client=client)
+
+    print("Successfully connected!")
 
     # Fetch all trades
     print("Fetching trades...")
@@ -234,33 +135,23 @@ def fetch_and_save_data():
 
     while True:
         print(f"  Page {page}...")
-        response = client.get_fills(cursor=cursor, limit=100)
 
-        # Handle both dict and object responses
-        if hasattr(response, 'fills'):
-            fills = response.fills or []
-            next_cursor = getattr(response, 'cursor', None)
+        if cursor:
+            response = portfolio_api.get_fills(cursor=cursor, limit=100)
         else:
-            fills = response.get('fills', [])
-            next_cursor = response.get('cursor')
+            response = portfolio_api.get_fills(limit=100)
+
+        fills = response.fills or []
 
         if not fills:
             break
 
         for fill in fills:
-            # Handle both dict and object
-            if hasattr(fill, 'ticker'):
-                ticker = fill.ticker
-                side = fill.side
-                count = fill.count
-                price = fill.price
-                created_time = fill.created_time
-            else:
-                ticker = fill.get('ticker', '')
-                side = fill.get('side', 'yes')
-                count = fill.get('count', 0)
-                price = fill.get('price', 0)
-                created_time = fill.get('created_time')
+            ticker = getattr(fill, 'ticker', '')
+            side = getattr(fill, 'side', 'yes')
+            count = getattr(fill, 'count', 0)
+            price = getattr(fill, 'price', 0)
+            created_time = getattr(fill, 'created_time', None)
 
             trade_date = parse_trade_date(created_time)
             cost = price * count
@@ -276,10 +167,11 @@ def fetch_and_save_data():
                 'sport': categorize_sport(ticker)
             })
 
-        if not next_cursor:
+        if hasattr(response, 'cursor') and response.cursor:
+            cursor = response.cursor
+            page += 1
+        else:
             break
-        cursor = next_cursor
-        page += 1
 
     print(f"Found {len(all_trades)} trades")
 
@@ -294,7 +186,7 @@ def fetch_and_save_data():
         ticker = trade['ticker']
         if ticker not in market_cache:
             try:
-                market_cache[ticker] = client.get_market(ticker)
+                market_cache[ticker] = market_api.get_market(ticker)
                 time.sleep(0.05)  # Rate limiting
             except Exception as e:
                 print(f"  Warning: Could not fetch market {ticker}: {e}")
