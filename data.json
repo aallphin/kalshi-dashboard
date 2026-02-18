@@ -1,27 +1,42 @@
 {
-  "generated_at": "2026-02-18T14:35:30.619161",
-  "generated_at_display": "February 18, 2026 at 02:35 PM",
+  "generated_at": "2026-02-18T20:01:19.276516",
+  "generated_at_display": "February 18, 2026 at 08:01 PM",
   "summary": {
-    "total_trades": 386,
+    "total_trades": 387,
+    "won": 0,
+    "lost": 0,
+    "open": 4,
+    "win_rate": 0,
+    "total_invested": 8903.19,
+    "total_payout": 0,
+    "total_profit": 0,
+    "roi": 0.0,
+    "avg_bet": 23.01
+  },
+  "recent_7_days": {
+    "trades": 5,
     "won": 0,
     "lost": 0,
     "open": 3,
     "win_rate": 0,
-    "total_invested": 8879.27,
-    "total_payout": 0,
-    "total_profit": 0,
-    "roi": 0.0,
-    "avg_bet": 23.0
-  },
-  "recent_7_days": {
-    "trades": 4,
-    "won": 0,
-    "lost": 0,
-    "open": 2,
-    "win_rate": 0,
-    "invested": 177.63,
+    "invested": 201.55,
     "profit": 0,
     "trades_list": [
+      {
+        "ticker": "KXWOMHOCKEYTOTAL-26FEB18USASWE-6",
+        "side": "yes",
+        "count": 52,
+        "price_dollars": 0.46,
+        "cost": 23.92,
+        "created_time": "2026-02-18 19:57:13.331371+00:00",
+        "trade_date": "2026-02-18T19:57:13.331371+00:00",
+        "sport": "Other",
+        "outcome_status": "open",
+        "payout": 0,
+        "profit": 0,
+        "month": "Feb 2026",
+        "month_sort": "2026-02"
+      },
       {
         "ticker": "KXWOMHOCKEYSPREAD-26FEB14USADNK-USA2",
         "side": "no",
@@ -86,6 +101,21 @@
   },
   "open_trades": [
     {
+      "ticker": "KXWOMHOCKEYTOTAL-26FEB18USASWE-6",
+      "side": "yes",
+      "count": 52,
+      "price_dollars": 0.46,
+      "cost": 23.92,
+      "created_time": "2026-02-18 19:57:13.331371+00:00",
+      "trade_date": "2026-02-18T19:57:13.331371+00:00",
+      "sport": "Other",
+      "outcome_status": "open",
+      "payout": 0,
+      "profit": 0,
+      "month": "Feb 2026",
+      "month_sort": "2026-02"
+    },
+    {
       "ticker": "KXT20WORLDCUP-26-AUS",
       "side": "yes",
       "count": 168,
@@ -134,14 +164,29 @@
   "by_sport": [
     {
       "sport": "Other",
-      "trades": 55,
+      "trades": 56,
       "won": 0,
       "lost": 0,
       "win_rate": 0,
-      "invested": 1155.34,
+      "invested": 1179.26,
       "profit": 0,
-      "avg_bet": 21.01,
+      "avg_bet": 21.06,
       "trades_list": [
+        {
+          "ticker": "KXWOMHOCKEYTOTAL-26FEB18USASWE-6",
+          "side": "yes",
+          "count": 52,
+          "price_dollars": 0.46,
+          "cost": 23.92,
+          "created_time": "2026-02-18 19:57:13.331371+00:00",
+          "trade_date": "2026-02-18T19:57:13.331371+00:00",
+          "sport": "Other",
+          "outcome_status": "open",
+          "payout": 0,
+          "profit": 0,
+          "month": "Feb 2026",
+          "month_sort": "2026-02"
+        },
         {
           "ticker": "KXWOMHOCKEYSPREAD-26FEB14USADNK-USA2",
           "side": "no",
@@ -11710,14 +11755,29 @@
     {
       "month": "Feb 2026",
       "month_sort": "2026-02",
-      "trades": 12,
+      "trades": 13,
       "won": 0,
       "lost": 0,
       "win_rate": 0,
-      "invested": 372.1,
+      "invested": 396.02,
       "profit": 0,
-      "avg_bet": 31.01,
+      "avg_bet": 30.46,
       "trades_list": [
+        {
+          "ticker": "KXWOMHOCKEYTOTAL-26FEB18USASWE-6",
+          "side": "yes",
+          "count": 52,
+          "price_dollars": 0.46,
+          "cost": 23.92,
+          "created_time": "2026-02-18 19:57:13.331371+00:00",
+          "trade_date": "2026-02-18T19:57:13.331371+00:00",
+          "sport": "Other",
+          "outcome_status": "open",
+          "payout": 0,
+          "profit": 0,
+          "month": "Feb 2026",
+          "month_sort": "2026-02"
+        },
         {
           "ticker": "KXWOMHOCKEYSPREAD-26FEB14USADNK-USA2",
           "side": "no",
@@ -11902,6 +11962,21 @@
     }
   ],
   "all_trades": [
+    {
+      "ticker": "KXWOMHOCKEYTOTAL-26FEB18USASWE-6",
+      "side": "yes",
+      "count": 52,
+      "price_dollars": 0.46,
+      "cost": 23.92,
+      "created_time": "2026-02-18 19:57:13.331371+00:00",
+      "trade_date": "2026-02-18T19:57:13.331371+00:00",
+      "sport": "Other",
+      "outcome_status": "open",
+      "payout": 0,
+      "profit": 0,
+      "month": "Feb 2026",
+      "month_sort": "2026-02"
+    },
     {
       "ticker": "KXWOMHOCKEYSPREAD-26FEB14USADNK-USA2",
       "side": "no",
