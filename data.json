@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-02-20T14:25:07.759247",
-  "generated_at_display": "February 20, 2026 at 02:25 PM",
+  "generated_at": "2026-02-20T19:49:14.483506",
+  "generated_at_display": "February 20, 2026 at 07:49 PM",
   "summary": {
     "total_trades": 387,
     "won": 0,
     "lost": 0,
-    "open": 3,
+    "open": 2,
     "win_rate": 0,
     "total_invested": 8903.19,
     "total_payout": 0,
@@ -99,21 +99,6 @@
       "profit": 0,
       "month": "Feb 2026",
       "month_sort": "2026-02"
-    },
-    {
-      "ticker": "KXDJTVOSTARIFFS",
-      "side": "no",
-      "count": 44,
-      "price_dollars": 0.46,
-      "cost": 20.240000000000002,
-      "created_time": "2025-09-11 02:04:27.234873+00:00",
-      "trade_date": "2025-09-11T02:04:27.234873+00:00",
-      "sport": "Other",
-      "outcome_status": "open",
-      "payout": 0,
-      "profit": 0,
-      "month": "Sep 2025",
-      "month_sort": "2025-09"
     }
   ],
   "by_sport": [
@@ -961,7 +946,7 @@
           "created_time": "2025-09-11 02:04:27.234873+00:00",
           "trade_date": "2025-09-11T02:04:27.234873+00:00",
           "sport": "Other",
-          "outcome_status": "open",
+          "outcome_status": "unknown",
           "payout": 0,
           "profit": 0,
           "month": "Sep 2025",
@@ -7342,7 +7327,7 @@
           "created_time": "2025-09-11 02:04:27.234873+00:00",
           "trade_date": "2025-09-11T02:04:27.234873+00:00",
           "sport": "Other",
-          "outcome_status": "open",
+          "outcome_status": "unknown",
           "payout": 0,
           "profit": 0,
           "month": "Sep 2025",
@@ -17626,7 +17611,7 @@
       "created_time": "2025-09-11 02:04:27.234873+00:00",
       "trade_date": "2025-09-11T02:04:27.234873+00:00",
       "sport": "Other",
-      "outcome_status": "open",
+      "outcome_status": "unknown",
       "payout": 0,
       "profit": 0,
       "month": "Sep 2025",
