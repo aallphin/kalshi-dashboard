@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-02-21T19:04:57.478570",
-  "generated_at_display": "February 21, 2026 at 07:04 PM",
+  "generated_at": "2026-02-22T05:10:31.092558",
+  "generated_at_display": "February 22, 2026 at 05:10 AM",
   "summary": {
     "total_trades": 388,
     "won": 0,
@@ -14,12 +14,12 @@
     "avg_bet": 23.01
   },
   "recent_7_days": {
-    "trades": 4,
+    "trades": 2,
     "won": 0,
     "lost": 0,
     "open": 1,
     "win_rate": 0,
-    "invested": 107.4,
+    "invested": 47.37,
     "profit": 0,
     "trades_list": [
       {
@@ -46,36 +46,6 @@
         "created_time": "2026-02-18 19:57:13.331371+00:00",
         "trade_date": "2026-02-18T19:57:13.331371+00:00",
         "sport": "Other",
-        "outcome_status": "unknown",
-        "payout": 0,
-        "profit": 0,
-        "month": "Feb 2026",
-        "month_sort": "2026-02"
-      },
-      {
-        "ticker": "KXWOMHOCKEYSPREAD-26FEB14USADNK-USA2",
-        "side": "no",
-        "count": 60,
-        "price_dollars": 0.61,
-        "cost": 36.6,
-        "created_time": "2026-02-14 21:55:42.031702+00:00",
-        "trade_date": "2026-02-14T21:55:42.031702+00:00",
-        "sport": "Other",
-        "outcome_status": "unknown",
-        "payout": 0,
-        "profit": 0,
-        "month": "Feb 2026",
-        "month_sort": "2026-02"
-      },
-      {
-        "ticker": "KXNBA3PTCONTEST-26-TMAX",
-        "side": "yes",
-        "count": 213,
-        "price_dollars": 0.11,
-        "cost": 23.43,
-        "created_time": "2026-02-14 21:54:26.168691+00:00",
-        "trade_date": "2026-02-14T21:54:26.168691+00:00",
-        "sport": "NBA",
         "outcome_status": "unknown",
         "payout": 0,
         "profit": 0,
