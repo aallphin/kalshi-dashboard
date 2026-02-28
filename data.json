@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-02-27T18:27:30.998670",
-  "generated_at_display": "February 27, 2026 at 06:27 PM",
+  "generated_at": "2026-02-28T01:03:10.551238",
+  "generated_at_display": "February 28, 2026 at 01:03 AM",
   "summary": {
     "total_trades": 388,
     "won": 0,
@@ -14,30 +14,14 @@
     "avg_bet": 23.01
   },
   "recent_7_days": {
-    "trades": 1,
+    "trades": 0,
     "won": 0,
     "lost": 0,
     "open": 0,
     "win_rate": 0,
-    "invested": 23.45,
+    "invested": 0,
     "profit": 0,
-    "trades_list": [
-      {
-        "ticker": "KXWOMHOCKEYMVP-26-CHEL",
-        "side": "yes",
-        "count": 335,
-        "price_dollars": 0.07,
-        "cost": 23.450000000000003,
-        "created_time": "2026-02-20 22:52:37.318391+00:00",
-        "trade_date": "2026-02-20T22:52:37.318391+00:00",
-        "sport": "Other",
-        "outcome_status": "unknown",
-        "payout": 0,
-        "profit": 0,
-        "month": "Feb 2026",
-        "month_sort": "2026-02"
-      }
-    ]
+    "trades_list": []
   },
   "open_trades": [
     {
