@@ -1,5 +1,9 @@
 """
 Kalshi Data Fetcher for GitHub Actions
+Updated for Kalshi API fixed-point migration (March 2026)
+- count → count_fp (fractional contracts)
+- price (cents) → price_dollars
+- Robust datetime parsing for microseconds > 6 digits
 """
 
 import os
@@ -34,13 +38,72 @@ def categorize_sport(ticker):
 
 
 def parse_date(created_time):
+    """
+    Robust ISO datetime parser.
+    Handles Kalshi's microseconds that sometimes exceed 6 digits,
+    e.g. '2026-01-20T03:12:39.96724+00:00' (only 5 decimal digits)
+    or   '2026-03-01T12:00:00.1234567+00:00' (7 decimal digits).
+    """
     if not created_time:
         return None
     try:
         s = str(created_time).replace('Z', '+00:00')
+        # Normalize fractional seconds to exactly 6 digits
+        if '.' in s:
+            dot_idx = s.index('.')
+            # Find where the fractional part ends ('+', '-', or end of string)
+            end_idx = dot_idx + 1
+            while end_idx < len(s) and s[end_idx].isdigit():
+                end_idx += 1
+            frac = s[dot_idx + 1:end_idx]
+            frac_normalized = frac[:6].ljust(6, '0')  # truncate or pad to 6
+            s = s[:dot_idx + 1] + frac_normalized + s[end_idx:]
         return datetime.fromisoformat(s)
     except Exception:
         return None
+
+
+def get_fill_value(fill, attr, default=0):
+    """
+    Safely read a field from a fill object (works for both object and dict).
+    Prefers the *_dollars / *_fp variants introduced in the March 2026 migration.
+    Falls back to legacy field names so the script also works on older SDK versions.
+    """
+    if hasattr(fill, attr):
+        return getattr(fill, attr, default)
+    if isinstance(fill, dict):
+        return fill.get(attr, default)
+    return default
+
+
+def extract_fill_fields(fill):
+    """
+    Extract count and price from a fill, handling both new fixed-point fields
+    and legacy fields for backwards compatibility.
+    """
+    # count: prefer count_fp (fractional), fall back to count
+    count = get_fill_value(fill, 'count_fp') or get_fill_value(fill, 'count', 0)
+    try:
+        count = float(count)
+    except (TypeError, ValueError):
+        count = 0.0
+
+    # price: prefer price_dollars (already in $), fall back to price (cents)
+    price_dollars = get_fill_value(fill, 'price_dollars', None)
+    if price_dollars is not None:
+        try:
+            price = float(price_dollars)
+        except (TypeError, ValueError):
+            price = 0.0
+    else:
+        # Legacy: price was in cents
+        price_cents = get_fill_value(fill, 'price', 0)
+        try:
+            price = float(price_cents) / 100.0
+        except (TypeError, ValueError):
+            price = 0.0
+
+    return count, price
 
 
 def calc_outcome(trade, market_info):
@@ -60,7 +123,7 @@ def calc_outcome(trade, market_info):
 
     if status in ['open', 'active']:
         return {'status': 'open', 'payout': 0, 'profit': 0}
-    if status in ['closed', 'settled', 'finalized']:
+    if status in ['closed', 'settled', 'finalized', 'determined']:
         if result == trade['side'].lower():
             payout = trade['count'] * 1.0
             return {'status': 'won', 'payout': payout, 'profit': payout - trade['cost']}
@@ -73,7 +136,7 @@ def fetch_and_save_data():
     api_key_id = os.environ.get('KALSHI_API_KEY_ID')
     private_key = os.environ.get('KALSHI_PRIVATE_KEY')
     if not api_key_id or not private_key:
-        raise ValueError("Missing credentials")
+        raise ValueError("Missing credentials: KALSHI_API_KEY_ID and/or KALSHI_PRIVATE_KEY not set")
 
     private_key = private_key.replace('\\n', '\n')
     print("Connecting to Kalshi API...")
@@ -92,37 +155,60 @@ def fetch_and_save_data():
     cursor = None
     page = 1
     while True:
-        print(f"  Page {page}...")
-        if cursor:
-            response = portfolio_api.get_fills(cursor=cursor, limit=100)
-        else:
-            response = portfolio_api.get_fills(limit=100)
+        print(f"  Fetching fills page {page}...")
+        try:
+            if cursor:
+                response = portfolio_api.get_fills(cursor=cursor, limit=100)
+            else:
+                response = portfolio_api.get_fills(limit=100)
+        except Exception as e:
+            print(f"  Error fetching fills: {e}")
+            break
+
         fills = response.fills or []
         if not fills:
             break
+
         for fill in fills:
-            ticker = getattr(fill, 'ticker', '')
-            trade_date = parse_date(getattr(fill, 'created_time', None))
-            price = getattr(fill, 'price', 0)
-            count = getattr(fill, 'count', 0)
+            ticker = get_fill_value(fill, 'ticker', '')
+            if hasattr(fill, 'ticker'):
+                ticker = fill.ticker
+            elif isinstance(fill, dict):
+                ticker = fill.get('ticker', '')
+
+            side = get_fill_value(fill, 'side', 'yes')
+            if hasattr(fill, 'side'):
+                side = fill.side
+            elif isinstance(fill, dict):
+                side = fill.get('side', 'yes')
+
+            created_time_raw = get_fill_value(fill, 'created_time', None)
+            if hasattr(fill, 'created_time'):
+                created_time_raw = fill.created_time
+
+            trade_date = parse_date(created_time_raw)
+            count, price = extract_fill_fields(fill)
+
             all_trades.append({
                 'ticker': ticker,
-                'side': getattr(fill, 'side', 'yes'),
+                'side': side,
                 'count': count,
                 'price_dollars': price,
                 'cost': price * count,
-                'created_time': str(getattr(fill, 'created_time', '')),
+                'created_time': str(created_time_raw or ''),
                 'trade_date': trade_date.isoformat() if trade_date else None,
                 'sport': categorize_sport(ticker)
             })
+
         if hasattr(response, 'cursor') and response.cursor:
             cursor = response.cursor
             page += 1
         else:
             break
+
     print(f"Found {len(all_trades)} trades")
 
-    print("Fetching outcomes...")
+    print("Fetching market outcomes...")
     market_cache = {}
     for i, trade in enumerate(all_trades):
         if (i + 1) % 20 == 0:
@@ -133,12 +219,14 @@ def fetch_and_save_data():
                 market_cache[ticker] = markets_api.get_market(ticker)
                 time.sleep(0.05)
             except Exception as e:
-                print(f"  Warning: {ticker}: {e}")
+                print(f"  Warning: could not fetch market {ticker}: {e}")
                 market_cache[ticker] = None
+
         outcome = calc_outcome(trade, market_cache[ticker])
         trade['outcome_status'] = outcome['status']
         trade['payout'] = outcome['payout']
         trade['profit'] = outcome['profit']
+
         if trade['trade_date']:
             try:
                 dt = datetime.fromisoformat(trade['trade_date'])
@@ -180,6 +268,7 @@ def fetch_and_save_data():
                     recent.append(t)
             except Exception:
                 pass
+
     r_won = len([t for t in recent if t['outcome_status'] == 'won'])
     r_lost = len([t for t in recent if t['outcome_status'] == 'lost'])
     r_open = len([t for t in recent if t['outcome_status'] == 'open'])
@@ -263,6 +352,7 @@ def fetch_and_save_data():
 
     with open('data.json', 'w') as f:
         json.dump(data, f, indent=2, default=str)
+
     print(f"\nDone! Record: {won}W-{lost}L ({win_rate:.1f}%) | Profit: ${total_profit:+,.2f}")
 
 
