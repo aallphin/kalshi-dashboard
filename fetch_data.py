@@ -215,6 +215,18 @@ def fetch_and_save_data():
         if not fills:
             break
 
+        # DEBUG: print raw field names from first fill on first page only
+        if page == 1 and fills:
+            first = fills[0]
+            all_attrs = [a for a in dir(first) if not a.startswith('_')]
+            print("DEBUG all fill attributes:", all_attrs)
+            candidate_fields = ['count', 'count_fp', 'price', 'price_dollars',
+                                 'yes_price', 'no_price', 'trade_price', 'contracts',
+                                 'fill_price', 'total_cost', 'value']
+            print("DEBUG candidate values:", {
+                f: getattr(first, f, 'MISSING') for f in candidate_fields
+            })
+
         for fill in fills:
             ticker = get_fill_value(fill, 'ticker', '')
             if hasattr(fill, 'ticker'):
