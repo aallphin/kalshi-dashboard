@@ -197,55 +197,83 @@ def fetch_and_save_data():
             print(f"    Request error for {ticker}: {e}")
             return None
 
+    def get_raw_fills(cursor=None):
+        """Fetch fills via raw HTTP so we get count_fp and price_dollars directly."""
+        base_url = 'https://api.elections.kalshi.com/trade-api/v2'
+        path = '/portfolio/fills'
+        params = 'limit=100'
+        if cursor:
+            params += f'&cursor={cursor}'
+        full_path = f'{path}?{params}'
+        timestamp_ms = str(int(time.time() * 1000))
+        msg = timestamp_ms + 'GET' + full_path
+        try:
+            key = serialization.load_pem_private_key(
+                private_key.encode(), password=None, backend=default_backend()
+            )
+            sig = key.sign(msg.encode(), padding.PKCS1v15(), hashes.SHA256())
+            sig_b64 = base64.b64encode(sig).decode()
+        except Exception as e:
+            print(f"  Signing error for fills: {e}")
+            return [], None
+        headers = {
+            'Content-Type': 'application/json',
+            'KALSHI-ACCESS-KEY': api_key_id,
+            'KALSHI-ACCESS-TIMESTAMP': timestamp_ms,
+            'KALSHI-ACCESS-SIGNATURE': sig_b64,
+        }
+        try:
+            r = requests.get(base_url + full_path, headers=headers, timeout=10)
+            if r.status_code == 200:
+                data = r.json()
+                return data.get('fills', []), data.get('cursor')
+            else:
+                print(f"  HTTP {r.status_code} fetching fills: {r.text[:200]}")
+                return [], None
+        except Exception as e:
+            print(f"  Request error fetching fills: {e}")
+            return [], None
+
     all_trades = []
     cursor = None
     page = 1
     while True:
         print(f"  Fetching fills page {page}...")
-        try:
-            if cursor:
-                response = portfolio_api.get_fills(cursor=cursor, limit=100)
-            else:
-                response = portfolio_api.get_fills(limit=100)
-        except Exception as e:
-            print(f"  Error fetching fills: {e}")
-            break
+        fills, next_cursor = get_raw_fills(cursor)
 
-        fills = response.fills or []
         if not fills:
             break
 
-        # DEBUG: print raw field names from first fill on first page only
         if page == 1 and fills:
-            first = fills[0]
-            all_attrs = [a for a in dir(first) if not a.startswith('_')]
-            print("DEBUG all fill attributes:", all_attrs)
-            candidate_fields = ['count', 'count_fp', 'price', 'price_dollars',
-                                 'yes_price', 'no_price', 'trade_price', 'contracts',
-                                 'fill_price', 'total_cost', 'value']
-            print("DEBUG candidate values:", {
-                f: getattr(first, f, 'MISSING') for f in candidate_fields
-            })
+            print("DEBUG first raw fill keys:", list(fills[0].keys()))
+            print("DEBUG first raw fill:", {k: fills[0].get(k) for k in ['count', 'count_fp', 'price', 'price_dollars', 'ticker', 'side']})
 
         for fill in fills:
-            ticker = get_fill_value(fill, 'ticker', '')
-            if hasattr(fill, 'ticker'):
-                ticker = fill.ticker
-            elif isinstance(fill, dict):
-                ticker = fill.get('ticker', '')
-
-            side = get_fill_value(fill, 'side', 'yes')
-            if hasattr(fill, 'side'):
-                side = fill.side
-            elif isinstance(fill, dict):
-                side = fill.get('side', 'yes')
-
-            created_time_raw = get_fill_value(fill, 'created_time', None)
-            if hasattr(fill, 'created_time'):
-                created_time_raw = fill.created_time
-
+            ticker = fill.get('ticker', '')
+            side = fill.get('side', 'yes')
+            created_time_raw = fill.get('created_time', '')
             trade_date = parse_date(created_time_raw)
-            count, price = extract_fill_fields(fill)
+
+            # Use count_fp if available, fall back to count
+            count = fill.get('count_fp') or fill.get('count') or 0
+            try:
+                count = float(count)
+            except (TypeError, ValueError):
+                count = 0.0
+
+            # Use price_dollars if available, fall back to price (cents) / 100
+            price_dollars = fill.get('price_dollars')
+            if price_dollars is not None:
+                try:
+                    price = float(price_dollars)
+                except (TypeError, ValueError):
+                    price = 0.0
+            else:
+                price_cents = fill.get('price') or 0
+                try:
+                    price = float(price_cents) / 100.0
+                except (TypeError, ValueError):
+                    price = 0.0
 
             all_trades.append({
                 'ticker': ticker,
@@ -258,8 +286,8 @@ def fetch_and_save_data():
                 'sport': categorize_sport(ticker)
             })
 
-        if hasattr(response, 'cursor') and response.cursor:
-            cursor = response.cursor
+        if next_cursor:
+            cursor = next_cursor
             page += 1
         else:
             break
