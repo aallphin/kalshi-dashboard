@@ -234,36 +234,32 @@ def fetch_and_save_data():
         if not fills:
             break
 
-        if page == 1 and fills:
-            print("DEBUG first raw fill keys:", list(fills[0].keys()))
-            print("DEBUG first raw fill:", {k: fills[0].get(k) for k in ['count', 'count_fp', 'price', 'price_dollars', 'ticker', 'side']})
-
         for fill in fills:
             ticker = fill.get('ticker', '')
             side = fill.get('side', 'yes')
             created_time_raw = fill.get('created_time', '')
             trade_date = parse_date(created_time_raw)
 
-            # Use count_fp if available, fall back to count
+            # count_fp is returned as a string e.g. '51.28'
             count = fill.get('count_fp') or fill.get('count') or 0
             try:
                 count = float(count)
             except (TypeError, ValueError):
                 count = 0.0
 
-            # Use price_dollars if available, fall back to price (cents) / 100
-            price_dollars = fill.get('price_dollars')
-            if price_dollars is not None:
-                try:
-                    price = float(price_dollars)
-                except (TypeError, ValueError):
-                    price = 0.0
+            # Price is split into yes_price_dollars / no_price_dollars based on side
+            side_lower = (fill.get('side') or 'yes').lower()
+            if side_lower == 'yes':
+                raw_price = fill.get('yes_price_dollars') or fill.get('price_dollars') or fill.get('price') or 0
             else:
-                price_cents = fill.get('price') or 0
-                try:
-                    price = float(price_cents) / 100.0
-                except (TypeError, ValueError):
-                    price = 0.0
+                raw_price = fill.get('no_price_dollars') or fill.get('price_dollars') or fill.get('price') or 0
+            try:
+                price = float(raw_price)
+                # If value looks like cents (e.g. 65 instead of 0.65), convert
+                if price > 1.0:
+                    price = price / 100.0
+            except (TypeError, ValueError):
+                price = 0.0
 
             all_trades.append({
                 'ticker': ticker,
