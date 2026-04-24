@@ -4,11 +4,14 @@ Updated for Kalshi API fixed-point migration (March 2026)
 - count → count_fp (fractional contracts)
 - price (cents) → price_dollars
 - Robust datetime parsing for microseconds > 6 digits
+- Market status fetched via raw HTTP to bypass SDK pydantic enum validation
+  (Kalshi returns 'finalized' which the SDK model rejects)
 """
 
 import os
 import json
 import time
+import requests
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict
 import kalshi_python
@@ -106,29 +109,32 @@ def extract_fill_fields(fill):
     return count, price
 
 
-def calc_outcome(trade, market_info):
-    if not market_info:
+def calc_outcome(trade, market_dict):
+    """
+    market_dict is a plain Python dict from the raw API (not a pydantic SDK object),
+    so it handles any status string including 'finalized'.
+    Payout on Kalshi = $1.00 per contract won, so profit = count - cost.
+    """
+    if not market_dict:
         return {'status': 'unknown', 'payout': 0, 'profit': 0}
     try:
-        if hasattr(market_info, 'market'):
-            market = market_info.market
-            status = getattr(market, 'status', '').lower()
-            result = (getattr(market, 'result', '') or '').lower()
-        else:
-            market = market_info.get('market', {})
-            status = market.get('status', '').lower()
-            result = (market.get('result') or '').lower()
+        status = (market_dict.get('status') or '').lower()
+        result = (market_dict.get('result') or '').lower()
     except Exception:
         return {'status': 'unknown', 'payout': 0, 'profit': 0}
 
-    if status in ['open', 'active']:
+    if status in ['initialized', 'active', 'open']:
         return {'status': 'open', 'payout': 0, 'profit': 0}
     if status in ['closed', 'settled', 'finalized', 'determined']:
-        if result == trade['side'].lower():
+        if result and result == trade['side'].lower():
+            # Each contract pays $1.00
             payout = trade['count'] * 1.0
             return {'status': 'won', 'payout': payout, 'profit': payout - trade['cost']}
-        else:
+        elif result:
             return {'status': 'lost', 'payout': 0, 'profit': -trade['cost']}
+        else:
+            # Settled but no result yet (e.g. voided)
+            return {'status': 'unknown', 'payout': 0, 'profit': 0}
     return {'status': 'unknown', 'payout': 0, 'profit': 0}
 
 
@@ -148,8 +154,48 @@ def fetch_and_save_data():
 
     client = kalshi_python.KalshiClient(config)
     portfolio_api = kalshi_python.PortfolioApi(api_client=client)
-    markets_api = kalshi_python.MarketsApi(api_client=client)
     print("Connected!")
+
+    # We use a raw requests session for market lookups so that Kalshi's
+    # 'finalized' status doesn't get rejected by the SDK's pydantic model.
+    # The SDK handles auth header signing for us via get_fills; for market GETs
+    # we sign manually using the same key material.
+    import base64
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import padding
+    from cryptography.hazmat.backends import default_backend
+
+    def get_raw_market(ticker, api_key_id, private_key_pem):
+        """Fetch a market dict via raw HTTP, bypassing SDK pydantic validation."""
+        base_url = 'https://api.elections.kalshi.com/trade-api/v2'
+        path = f'/markets/{ticker}'
+        timestamp_ms = str(int(time.time() * 1000))
+        msg = timestamp_ms + 'GET' + path
+        try:
+            key = serialization.load_pem_private_key(
+                private_key_pem.encode(), password=None, backend=default_backend()
+            )
+            sig = key.sign(msg.encode(), padding.PKCS1v15(), hashes.SHA256())
+            sig_b64 = base64.b64encode(sig).decode()
+        except Exception as e:
+            print(f"    Signing error for {ticker}: {e}")
+            return None
+        headers = {
+            'Content-Type': 'application/json',
+            'KALSHI-ACCESS-KEY': api_key_id,
+            'KALSHI-ACCESS-TIMESTAMP': timestamp_ms,
+            'KALSHI-ACCESS-SIGNATURE': sig_b64,
+        }
+        try:
+            r = requests.get(base_url + path, headers=headers, timeout=10)
+            if r.status_code == 200:
+                return r.json().get('market', {})
+            else:
+                print(f"    HTTP {r.status_code} for {ticker}")
+                return None
+        except Exception as e:
+            print(f"    Request error for {ticker}: {e}")
+            return None
 
     all_trades = []
     cursor = None
@@ -215,12 +261,8 @@ def fetch_and_save_data():
             print(f"  {i + 1}/{len(all_trades)}")
         ticker = trade['ticker']
         if ticker not in market_cache:
-            try:
-                market_cache[ticker] = markets_api.get_market(ticker)
-                time.sleep(0.05)
-            except Exception as e:
-                print(f"  Warning: could not fetch market {ticker}: {e}")
-                market_cache[ticker] = None
+            market_cache[ticker] = get_raw_market(ticker, api_key_id, private_key)
+            time.sleep(0.05)
 
         outcome = calc_outcome(trade, market_cache[ticker])
         trade['outcome_status'] = outcome['status']
