@@ -165,65 +165,40 @@ def fetch_and_save_data():
     from cryptography.hazmat.primitives.asymmetric import padding
     from cryptography.hazmat.backends import default_backend
 
-    def get_raw_market(ticker, api_key_id, private_key_pem):
-        """Fetch a market dict via raw HTTP, bypassing SDK pydantic validation."""
-        base_url = 'https://api.elections.kalshi.com/trade-api/v2'
-        path = f'/markets/{ticker}'
+    def sign_request(method, path):
+        """Sign a Kalshi API request using RSA-PSS (required by Kalshi)."""
         timestamp_ms = str(int(time.time() * 1000))
-        msg = timestamp_ms + 'GET' + path
-        try:
-            key = serialization.load_pem_private_key(
-                private_key_pem.encode(), password=None, backend=default_backend()
-            )
-            sig = key.sign(msg.encode(), padding.PKCS1v15(), hashes.SHA256())
-            sig_b64 = base64.b64encode(sig).decode()
-        except Exception as e:
-            print(f"    Signing error for {ticker}: {e}")
-            return None
-        headers = {
+        # Sign only path WITHOUT query params
+        path_no_query = path.split('?')[0]
+        msg = (timestamp_ms + method + path_no_query).encode('utf-8')
+        key = serialization.load_pem_private_key(
+            private_key.encode(), password=None, backend=default_backend()
+        )
+        sig = key.sign(
+            msg,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.DIGEST_LENGTH
+            ),
+            hashes.SHA256()
+        )
+        return {
             'Content-Type': 'application/json',
             'KALSHI-ACCESS-KEY': api_key_id,
             'KALSHI-ACCESS-TIMESTAMP': timestamp_ms,
-            'KALSHI-ACCESS-SIGNATURE': sig_b64,
+            'KALSHI-ACCESS-SIGNATURE': base64.b64encode(sig).decode(),
         }
-        try:
-            r = requests.get(base_url + path, headers=headers, timeout=10)
-            if r.status_code == 200:
-                return r.json().get('market', {})
-            else:
-                print(f"    HTTP {r.status_code} for {ticker}")
-                return None
-        except Exception as e:
-            print(f"    Request error for {ticker}: {e}")
-            return None
 
     def get_raw_fills(cursor=None):
         """Fetch fills via raw HTTP so we get count_fp and price_dollars directly."""
         base_url = 'https://api.elections.kalshi.com/trade-api/v2'
-        path = '/portfolio/fills'
+        path = '/trade-api/v2/portfolio/fills'
         params = 'limit=100'
         if cursor:
             params += f'&cursor={cursor}'
-        full_path = f'{path}?{params}'
-        timestamp_ms = str(int(time.time() * 1000))
-        msg = timestamp_ms + 'GET' + full_path
+        url = f'https://api.elections.kalshi.com{path}?{params}'
         try:
-            key = serialization.load_pem_private_key(
-                private_key.encode(), password=None, backend=default_backend()
-            )
-            sig = key.sign(msg.encode(), padding.PKCS1v15(), hashes.SHA256())
-            sig_b64 = base64.b64encode(sig).decode()
-        except Exception as e:
-            print(f"  Signing error for fills: {e}")
-            return [], None
-        headers = {
-            'Content-Type': 'application/json',
-            'KALSHI-ACCESS-KEY': api_key_id,
-            'KALSHI-ACCESS-TIMESTAMP': timestamp_ms,
-            'KALSHI-ACCESS-SIGNATURE': sig_b64,
-        }
-        try:
-            r = requests.get(base_url + full_path, headers=headers, timeout=10)
+            r = requests.get(url, headers=sign_request('GET', path), timeout=10)
             if r.status_code == 200:
                 data = r.json()
                 return data.get('fills', []), data.get('cursor')
@@ -233,6 +208,21 @@ def fetch_and_save_data():
         except Exception as e:
             print(f"  Request error fetching fills: {e}")
             return [], None
+
+    def get_raw_market(ticker):
+        """Fetch a market dict via raw HTTP, bypassing SDK pydantic validation."""
+        path = f'/trade-api/v2/markets/{ticker}'
+        url = f'https://api.elections.kalshi.com{path}'
+        try:
+            r = requests.get(url, headers=sign_request('GET', path), timeout=10)
+            if r.status_code == 200:
+                return r.json().get('market', {})
+            else:
+                print(f"    HTTP {r.status_code} for {ticker}")
+                return None
+        except Exception as e:
+            print(f"    Request error for {ticker}: {e}")
+            return None
 
     all_trades = []
     cursor = None
@@ -301,7 +291,7 @@ def fetch_and_save_data():
             print(f"  {i + 1}/{len(all_trades)}")
         ticker = trade['ticker']
         if ticker not in market_cache:
-            market_cache[ticker] = get_raw_market(ticker, api_key_id, private_key)
+            market_cache[ticker] = get_raw_market(ticker)
             time.sleep(0.05)
 
         outcome = calc_outcome(trade, market_cache[ticker])
