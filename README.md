@@ -1,94 +1,129 @@
 # Kalshi Performance Dashboard
 
-A live web dashboard for tracking your Kalshi trading performance. Hosted on GitHub Pages with automatic data updates via GitHub Actions.
+A live web dashboard for tracking your Kalshi trading performance.
+A GitHub Actions cron job pulls your fills from Kalshi every six hours,
+groups them into positions, computes settled vs. open P/L, and writes
+`data.json`. The static `index.html` reads that file.
 
-## 🚀 Setup Instructions
+## What changed in this version
 
-### Step 1: Create GitHub Repository
+- Fills are grouped into positions by `(ticker, side)` — multi-fill orders
+  no longer count as multiple trades.
+- Buy and sell fills are tracked separately. Closing fills now correctly
+  show up as proceeds instead of being double-counted as new buys.
+- Voided / no-contest markets are tracked in a `void` bucket and refunded
+  instead of being silently treated as losses.
+- Headline ROI is computed on **settled** positions only. Open exposure
+  is shown in its own card so live capital doesn't drag the headline down.
+- Each trade now has both a `sport` and `bet_type`, derived from the
+  Kalshi ticker prefix (Moneyline, Spread, 1H Spread, Total, Parlay,
+  Cross-Category Parlay, Outright Winner, MVP/Award, etc.).
+- New "By Bet Type" tab with the same table format as "By Sport".
+- Per-sport / per-bet-type / per-month tables now include `ROI`.
 
-1. Go to [github.com/new](https://github.com/new)
-2. Name it `kalshi-dashboard` (or whatever you prefer)
-3. Make it **Private** (important - this will contain your trading data)
-4. Click **Create repository**
+## Setup
 
-### Step 2: Upload Files
+### 1. Create a private GitHub repository
 
-Upload all files from this folder to your new repository:
+The repo MUST be private — `data.json` contains every trade you've made.
+
+### 2. Upload the files
+
+Upload these to the root of the repo:
+
 - `index.html`
 - `fetch_data.py`
 - `requirements.txt`
 - `.github/workflows/update-data.yml`
 
-You can drag and drop them directly on the GitHub page, or use:
-```bash
-cd kalshi-dashboard-site
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/kalshi-dashboard.git
-git push -u origin main
-```
+### 3. Add API credentials as Actions secrets
 
-### Step 3: Add Your API Credentials as Secrets
+Settings → Secrets and variables → Actions → New repository secret.
 
-1. Go to your repository on GitHub
-2. Click **Settings** → **Secrets and variables** → **Actions**
-3. Click **New repository secret**
-4. Add these two secrets:
+- `KALSHI_API_KEY_ID` — your Kalshi API key id (UUID).
+- `KALSHI_PRIVATE_KEY` — the full PEM, including the
+  `-----BEGIN ... PRIVATE KEY-----` / `-----END ... PRIVATE KEY-----` lines.
 
-**Secret 1:**
-- Name: `KALSHI_API_KEY_ID`
-- Value: Your Kalshi API Key ID (e.g., `5475d422-1cb7-4148-94cd-aeb60a5e5b16`)
+### 4. Run the workflow once
 
-**Secret 2:**
-- Name: `KALSHI_PRIVATE_KEY`
-- Value: Your entire private key, including the `-----BEGIN RSA PRIVATE KEY-----` and `-----END RSA PRIVATE KEY-----` lines
+Actions tab → "Update Kalshi Data" → Run workflow. After it finishes
+you'll have a `data.json` committed to `main`.
 
-### Step 4: Enable GitHub Pages
+### 5. Pick where to host
 
-1. Go to **Settings** → **Pages**
-2. Under "Source", select **Deploy from a branch**
-3. Select **main** branch and **/ (root)** folder
-4. Click **Save**
+You have a few options. The previous README assumed GitHub Pages, but
+that's not the cleanest fit if you're on a free GitHub plan.
 
-Your dashboard will be live at: `https://YOUR_USERNAME.github.io/kalshi-dashboard/`
+#### Option A: GitHub Pages (only if you have GitHub Pro/Team)
 
-### Step 5: Run First Data Sync
+Settings → Pages → Source: "Deploy from a branch" → Branch: `main`,
+folder: `/ (root)`. Your dashboard goes live at
+`https://<username>.github.io/kalshi-dashboard/`.
 
-1. Go to **Actions** tab
-2. Click **Update Kalshi Data** workflow
-3. Click **Run workflow** → **Run workflow**
-4. Wait for it to complete (usually 2-3 minutes)
+Pages on a *private* repo requires a paid GitHub plan. On the free plan,
+the only way to use Pages is to make the repo public — which would make
+your `data.json` (every trade, every dollar) world-readable. **Don't.**
 
-## 📊 How It Works
+#### Option B: Cloudflare Pages (recommended on free)
 
-- **GitHub Actions** runs every 6 hours to fetch your latest trades from Kalshi
-- Data is saved to `data.json` and committed to the repository
-- **GitHub Pages** serves your dashboard as a static website
-- The dashboard reads `data.json` when you open it
+Free tier supports private GitHub repos and gives you a fast global CDN.
 
-## 🔄 Manual Updates
+1. Go to https://pages.cloudflare.com/ and create an account.
+2. "Create a project" → "Connect to Git" → authorize Cloudflare on your
+   GitHub account → pick `kalshi-dashboard`.
+3. Build settings: leave the build command **empty**, output directory
+   `/`. We aren't building anything — just serving static files.
+4. Deploy. You get a URL like `kalshi-dashboard.pages.dev`.
 
-To update data manually:
-1. Go to **Actions** → **Update Kalshi Data**
-2. Click **Run workflow**
+Cloudflare automatically redeploys whenever the GitHub Actions cron job
+commits a new `data.json`, so the dashboard stays fresh without any
+extra wiring.
 
-## 🔒 Security
+#### Option C: Vercel or Netlify
 
-- Your API credentials are stored as GitHub Secrets (encrypted, never visible in code)
-- The repository should be **Private** to keep your trading data confidential
-- GitHub Pages can still serve private repos to you when you're logged in
+Same idea as Cloudflare Pages: free tier, private repos OK, GitHub
+integration. Use either if you already have an account there.
 
-## 🛠 Troubleshooting
+#### Option D: Don't host it at all
 
-**"Could not load data" error:**
-- The workflow hasn't run yet. Go to Actions and run it manually.
+If you only want to look at the dashboard from your own laptop, just
+clone the repo and open `index.html` in a browser. No hosting needed.
 
-**Workflow fails:**
-- Check that your API credentials are correct in Settings → Secrets
-- Make sure the private key includes the full PEM format with headers
+## How it works
 
-**Data not updating:**
-- Check the Actions tab for any failed runs
-- GitHub Actions may be disabled - enable them in Settings → Actions
+1. `.github/workflows/update-data.yml` runs `fetch_data.py` every 6 hours.
+2. `fetch_data.py` calls `/portfolio/fills`, paginates through every fill,
+   groups them by `(ticker, side)`, looks up each market's settlement
+   status, computes per-position P/L, and writes `data.json`.
+3. The Action commits `data.json` back to `main`.
+4. Your hosting provider (Cloudflare Pages / Vercel / GitHub Pages)
+   redeploys, and the dashboard reads the new `data.json`.
+
+## Manual update
+
+Actions → "Update Kalshi Data" → Run workflow.
+
+## Known limitations
+
+- **Trading fees are not yet subtracted from P/L.** Kalshi charges a
+  small per-fill fee that lands on settlements. The dashboard shows a
+  warning banner about this. If you want exact net P/L, plan to wire in
+  `/portfolio/settlements` and subtract `revenue - cost` per market.
+- The ticker → sport / bet-type taxonomy is based on prefix matching.
+  Unknown leagues fall into the `Other` bucket; if you see one, the
+  patterns at the top of `fetch_data.py` are easy to extend.
+
+## Troubleshooting
+
+**Workflow fails authenticating to Kalshi:** confirm the private key
+secret was pasted with the BEGIN/END lines intact and no surrounding
+whitespace. Kalshi switched to RSA-PSS signing — `fetch_data.py`
+handles that internally; just make sure the key material is correct.
+
+**"Could not load data" in the browser:** the workflow hasn't run yet,
+or your hosting provider hasn't redeployed since the last commit.
+Check the Actions tab and your hosting dashboard.
+
+**Bucket says `Other` for a sport you trade often:** add the league
+prefix (without the leading `KX`) to `SPORT_PATTERNS` in
+`fetch_data.py`, then re-run the workflow.

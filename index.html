@@ -492,12 +492,15 @@
 
         <div id="errorMessage" class="error-message" style="display: none;"></div>
 
+        <div id="feesNote" style="display:none; background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.25); color: #fbbf24; padding: 10px 14px; border-radius: 8px; font-size: 0.8em; margin-bottom: 16px;"></div>
+
         <!-- Top Stats Bar - Single Row -->
         <div class="top-stats-bar" id="topStatsBar"></div>
 
         <div class="tabs">
             <button class="tab active" onclick="switchTab('overview')">Overview</button>
             <button class="tab" onclick="switchTab('sports')">By Sport</button>
+            <button class="tab" onclick="switchTab('bettypes')">By Bet Type</button>
             <button class="tab" onclick="switchTab('months')">By Month</button>
             <button class="tab" onclick="switchTab('trades')">All Trades</button>
         </div>
@@ -520,7 +523,7 @@
         <div id="tab-sports" class="tab-content">
             <div class="section">
                 <h2>Performance by Sport</h2>
-                <p style="color: #a1a1aa; margin-bottom: 12px; font-size: 0.85em;">Click any row to see individual trades</p>
+                <p style="color: #a1a1aa; margin-bottom: 12px; font-size: 0.85em;">Sorted by net profit. Click any row to see individual trades.</p>
                 <table id="sportTable">
                     <thead>
                         <tr>
@@ -528,11 +531,36 @@
                             <th>Trades</th>
                             <th>Record</th>
                             <th>Win %</th>
+                            <th>Invested</th>
                             <th>Net P/L</th>
+                            <th>ROI</th>
                             <th>Avg Bet</th>
                         </tr>
                     </thead>
                     <tbody id="sportTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- By Bet Type Tab -->
+        <div id="tab-bettypes" class="tab-content">
+            <div class="section">
+                <h2>Performance by Bet Type</h2>
+                <p style="color: #a1a1aa; margin-bottom: 12px; font-size: 0.85em;">Moneyline, spread, total, parlay, futures, etc. Click any row to expand.</p>
+                <table id="betTypeTable">
+                    <thead>
+                        <tr>
+                            <th>Bet Type</th>
+                            <th>Trades</th>
+                            <th>Record</th>
+                            <th>Win %</th>
+                            <th>Invested</th>
+                            <th>Net P/L</th>
+                            <th>ROI</th>
+                            <th>Avg Bet</th>
+                        </tr>
+                    </thead>
+                    <tbody id="betTypeTableBody"></tbody>
                 </table>
             </div>
         </div>
@@ -549,7 +577,9 @@
                             <th>Trades</th>
                             <th>Record</th>
                             <th>Win %</th>
+                            <th>Invested</th>
                             <th>Net P/L</th>
+                            <th>ROI</th>
                             <th>Avg Bet</th>
                         </tr>
                     </thead>
@@ -718,31 +748,53 @@
 
             const s = dashboardData.summary;
 
-            document.getElementById('totalTrades').textContent = `${s.total_trades} Total Trades`;
+            document.getElementById('totalTrades').textContent = `${s.total_trades} Positions`;
             document.getElementById('lastUpdated').textContent = `Updated: ${dashboardData.generated_at_display}`;
 
-            // Top stats bar - single row
+            if (s.fees_note) {
+                const feesEl = document.getElementById('feesNote');
+                feesEl.textContent = `Note: ${s.fees_note}`;
+                feesEl.style.display = 'block';
+            }
+
+            // Top stats bar — settled-only headline numbers + a separate
+            // open-exposure card so live capital doesn't drag headline ROI down.
+            // Falls back to legacy fields for older data.json snapshots.
+            const settledInvested = s.settled_invested ?? s.total_invested;
+            const settledProfit   = s.settled_profit   ?? s.total_profit;
+            const settledRoi      = s.settled_roi      ?? s.roi;
+            const openExposure    = s.open_exposure    ?? 0;
+            const voidCount       = s.void             ?? 0;
+
+            const recordSubtext = voidCount > 0
+                ? `${s.win_rate}% Win • ${voidCount} void`
+                : `${s.win_rate}% Win`;
+
             const topStatsHtml = `
                 <div class="top-stat">
                     <h3>Record</h3>
                     <div class="value">${s.won} - ${s.lost}</div>
-                    <div class="subtext">${s.win_rate}% Win</div>
+                    <div class="subtext">${recordSubtext}</div>
                 </div>
                 <div class="top-stat">
-                    <h3>Total Bet</h3>
-                    <div class="value">${formatMoney(s.total_invested)}</div>
+                    <h3>Settled Bets</h3>
+                    <div class="value">${formatMoney(settledInvested)}</div>
+                    <div class="subtext">${(s.won||0) + (s.lost||0) + voidCount} positions</div>
                 </div>
-                <div class="top-stat">
-                    <h3>Total Payout</h3>
-                    <div class="value">${formatMoney(s.total_payout)}</div>
-                </div>
-                <div class="top-stat ${s.total_profit >= 0 ? 'positive' : 'negative'}">
+                <div class="top-stat ${settledProfit >= 0 ? 'positive' : 'negative'}">
                     <h3>Net P/L</h3>
-                    <div class="value">${formatMoney(s.total_profit, true)}</div>
+                    <div class="value">${formatMoney(settledProfit, true)}</div>
+                    <div class="subtext">settled only</div>
+                </div>
+                <div class="top-stat ${settledRoi >= 0 ? 'positive' : 'negative'}">
+                    <h3>ROI</h3>
+                    <div class="value">${settledRoi >= 0 ? '+' : ''}${settledRoi}%</div>
+                    <div class="subtext">settled only</div>
                 </div>
                 <div class="top-stat">
-                    <h3>ROI</h3>
-                    <div class="value">${s.roi}%</div>
+                    <h3>Open Exposure</h3>
+                    <div class="value">${formatMoney(openExposure)}</div>
+                    <div class="subtext">${s.open || 0} live</div>
                 </div>
                 <div class="top-stat">
                     <h3>Avg Bet</h3>
@@ -796,6 +848,7 @@
             }
 
             renderSportTable();
+            renderBetTypeTable();
             renderMonthTable();
             renderAllTrades();
         }
@@ -804,12 +857,14 @@
             const statusClass = t.outcome_status || 'unknown';
             const profitClass = t.profit > 0 ? 'positive' : t.profit < 0 ? 'negative' : '';
             const matchup = parseTickerForMatchup(t.ticker, t.side);
+            const betType = t.bet_type ? ` · ${t.bet_type}` : '';
+            const fillsNote = (t.fills_count && t.fills_count > 1) ? ` · ${t.fills_count} fills` : '';
 
             if (showMatchup && matchup.type !== 'unknown') {
                 return `
                     <div class="trade-item ${statusClass}">
                         <div class="matchup">${matchup.display} <span class="bet-side">(${matchup.betDisplay || t.side.toUpperCase()})</span></div>
-                        <div><strong>${t.sport}</strong> | ${t.month || 'Unknown'} | ${t.count} @ ${formatMoney(t.price_dollars)} = ${formatMoney(t.cost)}</div>
+                        <div><strong>${t.sport}</strong>${betType} | ${t.month || 'Unknown'} | ${t.count} @ ${formatMoney(t.price_dollars)} = ${formatMoney(t.cost)}${fillsNote}</div>
                         <div style="font-size: 0.8em; color: #71717a; margin-top: 4px;">
                             ${t.ticker} | <span class="badge badge-${statusClass}">${statusClass}</span> |
                             <span class="${profitClass}">P/L: ${formatMoney(t.profit, true)}</span>
@@ -820,7 +875,7 @@
 
             return `
                 <div class="trade-item ${statusClass}">
-                    <div><strong>${t.sport}</strong> | ${t.month || 'Unknown'} | ${t.side.toUpperCase()} | ${t.count} @ ${formatMoney(t.price_dollars)} = ${formatMoney(t.cost)}</div>
+                    <div><strong>${t.sport}</strong>${betType} | ${t.month || 'Unknown'} | ${t.side.toUpperCase()} | ${t.count} @ ${formatMoney(t.price_dollars)} = ${formatMoney(t.cost)}${fillsNote}</div>
                     <div style="font-size: 0.85em; color: #a1a1aa; margin-top: 4px;">
                         ${t.ticker} | <span class="badge badge-${statusClass}">${statusClass}</span> |
                         <span class="${profitClass}">P/L: ${formatMoney(t.profit, true)}</span>
@@ -829,23 +884,37 @@
             `;
         }
 
-        function renderSportTable() {
-            const tbody = document.getElementById('sportTableBody');
-            tbody.innerHTML = (dashboardData.by_sport || []).map((s, i) => {
-                const profitClass = s.profit > 0 ? 'positive' : s.profit < 0 ? 'negative' : '';
-                const rowId = `sport-${i}`;
-                const trades = s.trades_list || [];
+        // Shared renderer for the by-sport and by-bet-type breakdown tables.
+        // Both have the same shape ({label, trades, won, lost, win_rate,
+        // invested, profit, roi, avg_bet, trades_list}); only the row id
+        // namespace and the label key differ.
+        function renderBreakdownTable(rows, tbodyId, rowIdPrefix, labelKey) {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+            if (!rows || rows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#a1a1aa;padding:20px;">No data yet.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = rows.map((r, i) => {
+                const profitClass = r.profit > 0 ? 'positive' : r.profit < 0 ? 'negative' : '';
+                const roi = r.roi ?? 0;
+                const roiClass = roi > 0 ? 'positive' : roi < 0 ? 'negative' : '';
+                const rowId = `${rowIdPrefix}-${i}`;
+                const trades = r.trades_list || [];
+                const label = r[labelKey] || 'Unknown';
                 return `
                     <tr class="clickable-row ${expandedRows.has(rowId) ? 'expanded' : ''}" onclick="toggleDetails('${rowId}')">
-                        <td><strong>${s.sport}</strong> <span class="expand-icon">▶</span></td>
-                        <td>${s.trades}</td>
-                        <td>${s.won} - ${s.lost}</td>
-                        <td>${s.win_rate}%</td>
-                        <td class="${profitClass}">${formatMoney(s.profit, true)}</td>
-                        <td>${formatMoney(s.avg_bet)}</td>
+                        <td><strong>${label}</strong> <span class="expand-icon">▶</span></td>
+                        <td>${r.trades}</td>
+                        <td>${r.won} - ${r.lost}</td>
+                        <td>${r.win_rate}%</td>
+                        <td>${formatMoney(r.invested)}</td>
+                        <td class="${profitClass}">${formatMoney(r.profit, true)}</td>
+                        <td class="${roiClass}">${roi >= 0 ? '+' : ''}${roi}%</td>
+                        <td>${formatMoney(r.avg_bet)}</td>
                     </tr>
                     <tr>
-                        <td colspan="6" style="padding: 0; border: none;">
+                        <td colspan="8" style="padding: 0; border: none;">
                             <div class="trade-details ${expandedRows.has(rowId) ? 'show' : ''}" id="${rowId}">
                                 <div style="padding: 12px;">
                                     ${trades.slice(0, 25).map(t => renderTradeItem(t, true)).join('')}
@@ -858,33 +927,31 @@
             }).join('');
         }
 
+        function renderSportTable() {
+            renderBreakdownTable(
+                dashboardData.by_sport || [],
+                'sportTableBody',
+                'sport',
+                'sport'
+            );
+        }
+
+        function renderBetTypeTable() {
+            renderBreakdownTable(
+                dashboardData.by_bet_type || [],
+                'betTypeTableBody',
+                'bettype',
+                'bet_type'
+            );
+        }
+
         function renderMonthTable() {
-            const tbody = document.getElementById('monthTableBody');
-            tbody.innerHTML = (dashboardData.by_month || []).map((m, i) => {
-                const profitClass = m.profit > 0 ? 'positive' : m.profit < 0 ? 'negative' : '';
-                const rowId = `month-${i}`;
-                const trades = m.trades_list || [];
-                return `
-                    <tr class="clickable-row ${expandedRows.has(rowId) ? 'expanded' : ''}" onclick="toggleDetails('${rowId}')">
-                        <td><strong>${m.month}</strong> <span class="expand-icon">▶</span></td>
-                        <td>${m.trades}</td>
-                        <td>${m.won} - ${m.lost}</td>
-                        <td>${m.win_rate}%</td>
-                        <td class="${profitClass}">${formatMoney(m.profit, true)}</td>
-                        <td>${formatMoney(m.avg_bet)}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" style="padding: 0; border: none;">
-                            <div class="trade-details ${expandedRows.has(rowId) ? 'show' : ''}" id="${rowId}">
-                                <div style="padding: 12px;">
-                                    ${trades.slice(0, 25).map(t => renderTradeItem(t, true)).join('')}
-                                    ${trades.length > 25 ? `<p style="color: #a1a1aa; padding: 10px;">...and ${trades.length - 25} more trades</p>` : ''}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
+            renderBreakdownTable(
+                dashboardData.by_month || [],
+                'monthTableBody',
+                'month',
+                'month'
+            );
         }
 
         function renderAllTrades(filter = '') {
@@ -896,7 +963,8 @@
                 trades = trades.filter(t => {
                     const matchup = parseTickerForMatchup(t.ticker, t.side);
                     return t.ticker.toLowerCase().includes(f) ||
-                           t.sport.toLowerCase().includes(f) ||
+                           (t.sport || '').toLowerCase().includes(f) ||
+                           (t.bet_type || '').toLowerCase().includes(f) ||
                            (matchup.display && matchup.display.toLowerCase().includes(f));
                 });
             }
