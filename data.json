@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-26T18:36:33.572368+00:00",
-  "generated_at_display": "April 26, 2026 at 06:36 PM UTC",
+  "generated_at": "2026-04-27T01:48:07.815850+00:00",
+  "generated_at_display": "April 27, 2026 at 01:48 AM UTC",
   "summary": {
     "total_trades": 23,
     "won": 5,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 7,
+    "trades": 6,
     "won": 2,
-    "lost": 5,
+    "lost": 4,
     "open": 0,
     "void": 0,
-    "win_rate": 28.6,
-    "invested": 188.42,
-    "profit": 280.86,
+    "win_rate": 33.3,
+    "invested": 142.44,
+    "profit": 326.84,
     "payout": 469.28,
-    "roi": 149.1,
-    "avg_bet": 26.92,
+    "roi": 229.5,
+    "avg_bet": 23.74,
     "trades_list": [
       {
         "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S202613A2ED78FD0-54B9DD40D6C",
@@ -144,25 +144,6 @@
         "net_contracts": 52.36,
         "outcome_status": "lost",
         "trade_date": "2026-04-21T03:25:07.969478+00:00",
-        "month": "Apr 2026",
-        "month_sort": "2026-04"
-      },
-      {
-        "ticker": "KXMVECROSSCATEGORY-S20267379209412B-17170E9E099",
-        "side": "yes",
-        "sport": "Multi-Sport",
-        "bet_type": "Cross-Category Parlay",
-        "count": 479.0,
-        "price_dollars": 0.096,
-        "cost": 45.98,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -45.98,
-        "net_contracts": 479.0,
-        "outcome_status": "lost",
-        "trade_date": "2026-04-19T21:57:29.045652+00:00",
         "month": "Apr 2026",
         "month_sort": "2026-04"
       }
