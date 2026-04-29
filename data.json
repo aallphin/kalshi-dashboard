@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-04-29T01:58:05.044010+00:00",
-  "generated_at_display": "April 29, 2026 at 01:58 AM UTC",
+  "generated_at": "2026-04-29T07:59:03.175605+00:00",
+  "generated_at_display": "April 29, 2026 at 07:59 AM UTC",
   "summary": {
-    "total_trades": 26,
+    "total_trades": 25,
     "won": 6,
-    "lost": 20,
+    "lost": 19,
     "open": 0,
     "void": 0,
-    "win_rate": 23.1,
-    "settled_invested": 983.81,
+    "win_rate": 24.0,
+    "settled_invested": 960.36,
     "settled_payout": 917.17,
-    "settled_profit": -66.64,
-    "settled_roi": -6.8,
+    "settled_profit": -43.19,
+    "settled_roi": -4.5,
     "open_exposure": 0,
-    "total_invested": 983.81,
+    "total_invested": 960.36,
     "total_payout": 917.17,
-    "total_profit": -66.64,
-    "roi": -6.8,
-    "avg_bet": 37.84,
+    "total_profit": -43.19,
+    "roi": -4.5,
+    "avg_bet": 38.41,
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
@@ -443,41 +443,6 @@
           "trade_date": "2026-04-08T02:54:38.489455+00:00",
           "month": "Apr 2026",
           "month_sort": "2026-04"
-        }
-      ]
-    },
-    {
-      "trades": 1,
-      "won": 0,
-      "lost": 1,
-      "open": 0,
-      "void": 0,
-      "win_rate": 0.0,
-      "invested": 23.45,
-      "profit": -23.45,
-      "payout": 0.0,
-      "roi": -100.0,
-      "avg_bet": 23.45,
-      "sport": "Women's Hockey",
-      "trades_list": [
-        {
-          "ticker": "KXWOMHOCKEYMVP-26-CHEL",
-          "side": "yes",
-          "sport": "Women's Hockey",
-          "bet_type": "MVP/Award",
-          "count": 335.0,
-          "price_dollars": 0.07,
-          "cost": 23.45,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -23.45,
-          "net_contracts": 335.0,
-          "outcome_status": "lost",
-          "trade_date": "2026-02-20T22:52:37.318391+00:00",
-          "month": "Feb 2026",
-          "month_sort": "2026-02"
         }
       ]
     },
@@ -1267,41 +1232,6 @@
       "open": 0,
       "void": 0,
       "win_rate": 0.0,
-      "invested": 23.45,
-      "profit": -23.45,
-      "payout": 0.0,
-      "roi": -100.0,
-      "avg_bet": 23.45,
-      "bet_type": "MVP/Award",
-      "trades_list": [
-        {
-          "ticker": "KXWOMHOCKEYMVP-26-CHEL",
-          "side": "yes",
-          "sport": "Women's Hockey",
-          "bet_type": "MVP/Award",
-          "count": 335.0,
-          "price_dollars": 0.07,
-          "cost": 23.45,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -23.45,
-          "net_contracts": 335.0,
-          "outcome_status": "lost",
-          "trade_date": "2026-02-20T22:52:37.318391+00:00",
-          "month": "Feb 2026",
-          "month_sort": "2026-02"
-        }
-      ]
-    },
-    {
-      "trades": 1,
-      "won": 0,
-      "lost": 1,
-      "open": 0,
-      "void": 0,
-      "win_rate": 0.0,
       "invested": 23.78,
       "profit": -23.78,
       "payout": 0.0,
@@ -1456,42 +1386,6 @@
     }
   ],
   "by_month": [
-    {
-      "trades": 1,
-      "won": 0,
-      "lost": 1,
-      "open": 0,
-      "void": 0,
-      "win_rate": 0.0,
-      "invested": 23.45,
-      "profit": -23.45,
-      "payout": 0.0,
-      "roi": -100.0,
-      "avg_bet": 23.45,
-      "month_sort": "2026-02",
-      "month": "Feb 2026",
-      "trades_list": [
-        {
-          "ticker": "KXWOMHOCKEYMVP-26-CHEL",
-          "side": "yes",
-          "sport": "Women's Hockey",
-          "bet_type": "MVP/Award",
-          "count": 335.0,
-          "price_dollars": 0.07,
-          "cost": 23.45,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -23.45,
-          "net_contracts": 335.0,
-          "outcome_status": "lost",
-          "trade_date": "2026-02-20T22:52:37.318391+00:00",
-          "month": "Feb 2026",
-          "month_sort": "2026-02"
-        }
-      ]
-    },
     {
       "trades": 9,
       "won": 1,
@@ -2477,25 +2371,6 @@
       "trade_date": "2026-03-07T03:50:08.876544+00:00",
       "month": "Mar 2026",
       "month_sort": "2026-03"
-    },
-    {
-      "ticker": "KXWOMHOCKEYMVP-26-CHEL",
-      "side": "yes",
-      "sport": "Women's Hockey",
-      "bet_type": "MVP/Award",
-      "count": 335.0,
-      "price_dollars": 0.07,
-      "cost": 23.45,
-      "fills_count": 1,
-      "sell_proceeds": 0.0,
-      "settle_payout": 0.0,
-      "payout": 0.0,
-      "profit": -23.45,
-      "net_contracts": 335.0,
-      "outcome_status": "lost",
-      "trade_date": "2026-02-20T22:52:37.318391+00:00",
-      "month": "Feb 2026",
-      "month_sort": "2026-02"
     }
   ]
 }
