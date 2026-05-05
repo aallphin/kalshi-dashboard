@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-04T19:12:56.008915+00:00",
-  "generated_at_display": "May 04, 2026 at 07:12 PM UTC",
+  "generated_at": "2026-05-05T01:52:45.351099+00:00",
+  "generated_at_display": "May 05, 2026 at 01:52 AM UTC",
   "summary": {
     "total_trades": 30,
     "won": 6,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 8,
+    "trades": 6,
     "won": 0,
-    "lost": 8,
+    "lost": 6,
     "open": 0,
     "void": 0,
     "win_rate": 0.0,
-    "invested": 356.17,
-    "profit": -356.17,
+    "invested": 285.71,
+    "profit": -285.71,
     "payout": 0.0,
     "roi": -100.0,
-    "avg_bet": 44.52,
+    "avg_bet": 47.62,
     "trades_list": [
       {
         "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S2026549DE343D9F-F34DBFD54C4",
@@ -144,44 +144,6 @@
         "net_contracts": 205.15,
         "outcome_status": "lost",
         "trade_date": "2026-04-28T04:47:15.299689+00:00",
-        "month": "Apr 2026",
-        "month_sort": "2026-04"
-      },
-      {
-        "ticker": "KXNHLGAME-26APR27PHIPIT-PHI",
-        "side": "yes",
-        "sport": "NHL",
-        "bet_type": "Moneyline",
-        "count": 98.9,
-        "price_dollars": 0.24,
-        "cost": 23.74,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -23.74,
-        "net_contracts": 98.9,
-        "outcome_status": "lost",
-        "trade_date": "2026-04-28T01:12:40.843525+00:00",
-        "month": "Apr 2026",
-        "month_sort": "2026-04"
-      },
-      {
-        "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S202609EEC96C976-BA772FF6FED",
-        "side": "yes",
-        "sport": "Esports",
-        "bet_type": "Parlay",
-        "count": 229.0,
-        "price_dollars": 0.204,
-        "cost": 46.72,
-        "fills_count": 2,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -46.72,
-        "net_contracts": 229.0,
-        "outcome_status": "lost",
-        "trade_date": "2026-04-27T22:57:13.812749+00:00",
         "month": "Apr 2026",
         "month_sort": "2026-04"
       }
