@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-05T01:52:45.351099+00:00",
-  "generated_at_display": "May 05, 2026 at 01:52 AM UTC",
+  "generated_at": "2026-05-05T07:52:49.948775+00:00",
+  "generated_at_display": "May 05, 2026 at 07:52 AM UTC",
   "summary": {
     "total_trades": 30,
     "won": 6,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 6,
+    "trades": 5,
     "won": 0,
-    "lost": 6,
+    "lost": 5,
     "open": 0,
     "void": 0,
     "win_rate": 0.0,
-    "invested": 285.71,
-    "profit": -285.71,
+    "invested": 189.29,
+    "profit": -189.29,
     "payout": 0.0,
     "roi": -100.0,
-    "avg_bet": 47.62,
+    "avg_bet": 37.86,
     "trades_list": [
       {
         "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S2026549DE343D9F-F34DBFD54C4",
@@ -125,25 +125,6 @@
         "net_contracts": 111.0,
         "outcome_status": "lost",
         "trade_date": "2026-04-29T23:51:32.815514+00:00",
-        "month": "Apr 2026",
-        "month_sort": "2026-04"
-      },
-      {
-        "ticker": "KXNHLGAME-26APR27VGKUTA-UTA",
-        "side": "yes",
-        "sport": "NHL",
-        "bet_type": "Moneyline",
-        "count": 205.15,
-        "price_dollars": 0.47,
-        "cost": 96.42,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -96.42,
-        "net_contracts": 205.15,
-        "outcome_status": "lost",
-        "trade_date": "2026-04-28T04:47:15.299689+00:00",
         "month": "Apr 2026",
         "month_sort": "2026-04"
       }
