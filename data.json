@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-06T19:21:03.334058+00:00",
-  "generated_at_display": "May 06, 2026 at 07:21 PM UTC",
+  "generated_at": "2026-05-07T01:55:43.819501+00:00",
+  "generated_at_display": "May 07, 2026 at 01:55 AM UTC",
   "summary": {
     "total_trades": 30,
     "won": 6,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 5,
+    "trades": 3,
     "won": 0,
-    "lost": 5,
+    "lost": 3,
     "open": 0,
     "void": 0,
     "win_rate": 0.0,
-    "invested": 189.29,
-    "profit": -189.29,
+    "invested": 118.68,
+    "profit": -118.68,
     "payout": 0.0,
     "roi": -100.0,
-    "avg_bet": 37.86,
+    "avg_bet": 39.56,
     "trades_list": [
       {
         "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S2026549DE343D9F-F34DBFD54C4",
@@ -89,44 +89,6 @@
         "trade_date": "2026-05-01T22:55:11.106171+00:00",
         "month": "May 2026",
         "month_sort": "2026-05"
-      },
-      {
-        "ticker": "KXMVECROSSCATEGORY-S2026D523172FADE-994D5A21A2F",
-        "side": "yes",
-        "sport": "Multi-Sport",
-        "bet_type": "Cross-Category Parlay",
-        "count": 186.0,
-        "price_dollars": 0.126,
-        "cost": 23.44,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -23.44,
-        "net_contracts": 186.0,
-        "outcome_status": "lost",
-        "trade_date": "2026-04-29T23:52:08.911746+00:00",
-        "month": "Apr 2026",
-        "month_sort": "2026-04"
-      },
-      {
-        "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S20268C903857CF5-2744479EB40",
-        "side": "yes",
-        "sport": "Esports",
-        "bet_type": "Parlay",
-        "count": 111.0,
-        "price_dollars": 0.425,
-        "cost": 47.17,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -47.17,
-        "net_contracts": 111.0,
-        "outcome_status": "lost",
-        "trade_date": "2026-04-29T23:51:32.815514+00:00",
-        "month": "Apr 2026",
-        "month_sort": "2026-04"
       }
     ]
   },
