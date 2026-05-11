@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-10T18:44:59.166682+00:00",
-  "generated_at_display": "May 10, 2026 at 06:44 PM UTC",
+  "generated_at": "2026-05-11T02:04:17.751258+00:00",
+  "generated_at_display": "May 11, 2026 at 02:04 AM UTC",
   "summary": {
     "total_trades": 30,
     "won": 6,
@@ -21,57 +21,18 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 2,
+    "trades": 0,
     "won": 0,
-    "lost": 2,
+    "lost": 0,
     "open": 0,
     "void": 0,
     "win_rate": 0.0,
-    "invested": 95.27,
-    "profit": -95.27,
-    "payout": 0.0,
-    "roi": -100.0,
-    "avg_bet": 47.63,
-    "trades_list": [
-      {
-        "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S2026549DE343D9F-F34DBFD54C4",
-        "side": "yes",
-        "sport": "Esports",
-        "bet_type": "Parlay",
-        "count": 242.0,
-        "price_dollars": 0.195,
-        "cost": 47.19,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -47.19,
-        "net_contracts": 242.0,
-        "outcome_status": "lost",
-        "trade_date": "2026-05-03T19:18:30.253727+00:00",
-        "month": "May 2026",
-        "month_sort": "2026-05"
-      },
-      {
-        "ticker": "KXMLBSPREAD-26MAY031610CWSSD-SD2",
-        "side": "yes",
-        "sport": "MLB",
-        "bet_type": "Spread",
-        "count": 111.81,
-        "price_dollars": 0.43,
-        "cost": 48.08,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -48.08,
-        "net_contracts": 111.81,
-        "outcome_status": "lost",
-        "trade_date": "2026-05-03T19:03:26.456303+00:00",
-        "month": "May 2026",
-        "month_sort": "2026-05"
-      }
-    ]
+    "invested": 0,
+    "profit": 0,
+    "payout": 0,
+    "roi": 0.0,
+    "avg_bet": 0.0,
+    "trades_list": []
   },
   "open_trades": [],
   "by_sport": [
