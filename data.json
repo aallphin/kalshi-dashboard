@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-05-28T02:00:30.540978+00:00",
-  "generated_at_display": "May 28, 2026 at 02:00 AM UTC",
+  "generated_at": "2026-05-28T09:43:36.286141+00:00",
+  "generated_at_display": "May 28, 2026 at 09:43 AM UTC",
   "summary": {
-    "total_trades": 26,
+    "total_trades": 25,
     "won": 5,
-    "lost": 21,
+    "lost": 20,
     "open": 0,
     "void": 0,
-    "win_rate": 19.2,
-    "settled_invested": 1020.2,
+    "win_rate": 20.0,
+    "settled_invested": 996.6,
     "settled_payout": 841.17,
-    "settled_profit": -179.03,
-    "settled_roi": -17.5,
+    "settled_profit": -155.43,
+    "settled_roi": -15.6,
     "open_exposure": 0,
-    "total_invested": 1020.2,
+    "total_invested": 996.6,
     "total_payout": 841.17,
-    "total_profit": -179.03,
-    "roi": -17.5,
-    "avg_bet": 39.24,
+    "total_profit": -155.43,
+    "roi": -15.6,
+    "avg_bet": 39.86,
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
@@ -383,41 +383,6 @@
           "trade_date": "2026-04-12T22:21:03.894266+00:00",
           "month": "Apr 2026",
           "month_sort": "2026-04"
-        }
-      ]
-    },
-    {
-      "trades": 1,
-      "won": 0,
-      "lost": 1,
-      "open": 0,
-      "void": 0,
-      "win_rate": 0.0,
-      "invested": 23.6,
-      "profit": -23.6,
-      "payout": 0.0,
-      "roi": -100.0,
-      "avg_bet": 23.6,
-      "sport": "College Basketball",
-      "trades_list": [
-        {
-          "ticker": "KXNCAAMBGAME-26MAR21HPARK-HP",
-          "side": "yes",
-          "sport": "College Basketball",
-          "bet_type": "Moneyline",
-          "count": 118.0,
-          "price_dollars": 0.2,
-          "cost": 23.6,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -23.6,
-          "net_contracts": 118.0,
-          "outcome_status": "lost",
-          "trade_date": "2026-03-22T02:38:57.467840+00:00",
-          "month": "Mar 2026",
-          "month_sort": "2026-03"
         }
       ]
     },
@@ -1027,17 +992,17 @@
       ]
     },
     {
-      "trades": 9,
+      "trades": 8,
       "won": 3,
-      "lost": 6,
+      "lost": 5,
       "open": 0,
       "void": 0,
-      "win_rate": 33.3,
-      "invested": 430.91,
-      "profit": -59.02,
+      "win_rate": 37.5,
+      "invested": 407.31,
+      "profit": -35.42,
       "payout": 371.89,
-      "roi": -13.7,
-      "avg_bet": 47.88,
+      "roi": -8.7,
+      "avg_bet": 50.91,
       "bet_type": "Moneyline",
       "trades_list": [
         {
@@ -1191,25 +1156,6 @@
           "trade_date": "2026-04-08T02:53:20.743960+00:00",
           "month": "Apr 2026",
           "month_sort": "2026-04"
-        },
-        {
-          "ticker": "KXNCAAMBGAME-26MAR21HPARK-HP",
-          "side": "yes",
-          "sport": "College Basketball",
-          "bet_type": "Moneyline",
-          "count": 118.0,
-          "price_dollars": 0.2,
-          "cost": 23.6,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -23.6,
-          "net_contracts": 118.0,
-          "outcome_status": "lost",
-          "trade_date": "2026-03-22T02:38:57.467840+00:00",
-          "month": "Mar 2026",
-          "month_sort": "2026-03"
         }
       ]
     },
@@ -1304,42 +1250,6 @@
     }
   ],
   "by_month": [
-    {
-      "trades": 1,
-      "won": 0,
-      "lost": 1,
-      "open": 0,
-      "void": 0,
-      "win_rate": 0.0,
-      "invested": 23.6,
-      "profit": -23.6,
-      "payout": 0.0,
-      "roi": -100.0,
-      "avg_bet": 23.6,
-      "month_sort": "2026-03",
-      "month": "Mar 2026",
-      "trades_list": [
-        {
-          "ticker": "KXNCAAMBGAME-26MAR21HPARK-HP",
-          "side": "yes",
-          "sport": "College Basketball",
-          "bet_type": "Moneyline",
-          "count": 118.0,
-          "price_dollars": 0.2,
-          "cost": 23.6,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -23.6,
-          "net_contracts": 118.0,
-          "outcome_status": "lost",
-          "trade_date": "2026-03-22T02:38:57.467840+00:00",
-          "month": "Mar 2026",
-          "month_sort": "2026-03"
-        }
-      ]
-    },
     {
       "trades": 18,
       "won": 5,
@@ -2325,25 +2235,6 @@
       "trade_date": "2026-04-04T20:12:10.608355+00:00",
       "month": "Apr 2026",
       "month_sort": "2026-04"
-    },
-    {
-      "ticker": "KXNCAAMBGAME-26MAR21HPARK-HP",
-      "side": "yes",
-      "sport": "College Basketball",
-      "bet_type": "Moneyline",
-      "count": 118.0,
-      "price_dollars": 0.2,
-      "cost": 23.6,
-      "fills_count": 1,
-      "sell_proceeds": 0.0,
-      "settle_payout": 0.0,
-      "payout": 0.0,
-      "profit": -23.6,
-      "net_contracts": 118.0,
-      "outcome_status": "lost",
-      "trade_date": "2026-03-22T02:38:57.467840+00:00",
-      "month": "Mar 2026",
-      "month_sort": "2026-03"
     }
   ]
 }
