@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-29T14:37:44.530643+00:00",
-  "generated_at_display": "May 29, 2026 at 02:37 PM UTC",
+  "generated_at": "2026-05-29T20:07:04.213059+00:00",
+  "generated_at_display": "May 29, 2026 at 08:07 PM UTC",
   "summary": {
     "total_trades": 25,
     "won": 5,
@@ -21,38 +21,18 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 1,
+    "trades": 0,
     "won": 0,
-    "lost": 1,
+    "lost": 0,
     "open": 0,
     "void": 0,
     "win_rate": 0.0,
-    "invested": 24.35,
-    "profit": -24.35,
-    "payout": 0.0,
-    "roi": -100.0,
-    "avg_bet": 24.35,
-    "trades_list": [
-      {
-        "ticker": "KXNHLGAME-26MAY22VGKCOL-COL",
-        "side": "yes",
-        "sport": "NHL",
-        "bet_type": "Moneyline",
-        "count": 39.27,
-        "price_dollars": 0.62,
-        "cost": 24.35,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -24.35,
-        "net_contracts": 39.27,
-        "outcome_status": "lost",
-        "trade_date": "2026-05-22T19:41:21.063755+00:00",
-        "month": "May 2026",
-        "month_sort": "2026-05"
-      }
-    ]
+    "invested": 0,
+    "profit": 0,
+    "payout": 0,
+    "roi": 0.0,
+    "avg_bet": 0.0,
+    "trades_list": []
   },
   "open_trades": [],
   "by_sport": [
