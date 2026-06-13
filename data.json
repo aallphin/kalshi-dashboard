@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-13T02:13:42.419629+00:00",
-  "generated_at_display": "June 13, 2026 at 02:13 AM UTC",
+  "generated_at": "2026-06-13T08:45:36.613222+00:00",
+  "generated_at_display": "June 13, 2026 at 08:45 AM UTC",
   "summary": {
     "total_trades": 30,
     "won": 7,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 4,
-    "won": 1,
+    "trades": 3,
+    "won": 0,
     "lost": 3,
     "open": 0,
     "void": 0,
-    "win_rate": 25.0,
-    "invested": 135.3,
-    "profit": -64.69,
-    "payout": 70.61,
-    "roi": -47.8,
-    "avg_bet": 33.83,
+    "win_rate": 0.0,
+    "invested": 108.47,
+    "profit": -108.47,
+    "payout": 0.0,
+    "roi": -100.0,
+    "avg_bet": 36.16,
     "trades_list": [
       {
         "ticker": "KXNBAGAME-26JUN10SASNYK-SAS",
@@ -87,25 +87,6 @@
         "net_contracts": 106.95,
         "outcome_status": "lost",
         "trade_date": "2026-06-07T01:21:40.392721+00:00",
-        "month": "Jun 2026",
-        "month_sort": "2026-06"
-      },
-      {
-        "ticker": "KXNBAGAME-26JUN05NYKSAS-NYK",
-        "side": "yes",
-        "sport": "NBA",
-        "bet_type": "Moneyline",
-        "count": 70.61,
-        "price_dollars": 0.38,
-        "cost": 26.83,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 70.61,
-        "payout": 70.61,
-        "profit": 43.78,
-        "net_contracts": 70.61,
-        "outcome_status": "won",
-        "trade_date": "2026-06-06T03:17:49.620006+00:00",
         "month": "Jun 2026",
         "month_sort": "2026-06"
       }
