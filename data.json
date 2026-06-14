@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-13T19:07:00.491228+00:00",
-  "generated_at_display": "June 13, 2026 at 07:07 PM UTC",
+  "generated_at": "2026-06-14T02:36:54.382729+00:00",
+  "generated_at_display": "June 14, 2026 at 02:36 AM UTC",
   "summary": {
     "total_trades": 30,
     "won": 7,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 3,
+    "trades": 2,
     "won": 0,
-    "lost": 3,
+    "lost": 2,
     "open": 0,
     "void": 0,
     "win_rate": 0.0,
-    "invested": 108.47,
-    "profit": -108.47,
+    "invested": 57.57,
+    "profit": -57.57,
     "payout": 0.0,
     "roi": -100.0,
-    "avg_bet": 36.16,
+    "avg_bet": 28.79,
     "trades_list": [
       {
         "ticker": "KXNBAGAME-26JUN10SASNYK-SAS",
@@ -68,25 +68,6 @@
         "net_contracts": 312.13,
         "outcome_status": "lost",
         "trade_date": "2026-06-07T03:14:19.544318+00:00",
-        "month": "Jun 2026",
-        "month_sort": "2026-06"
-      },
-      {
-        "ticker": "KXNHLGAME-26JUN06CARVGK-CAR",
-        "side": "yes",
-        "sport": "NHL",
-        "bet_type": "Moneyline",
-        "count": 106.94999999999999,
-        "price_dollars": 0.4759,
-        "cost": 50.9,
-        "fills_count": 3,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -50.9,
-        "net_contracts": 106.95,
-        "outcome_status": "lost",
-        "trade_date": "2026-06-07T01:21:40.392721+00:00",
         "month": "Jun 2026",
         "month_sort": "2026-06"
       }
