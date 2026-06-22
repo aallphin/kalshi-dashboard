@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-21T19:13:30.172870+00:00",
-  "generated_at_display": "June 21, 2026 at 07:13 PM UTC",
+  "generated_at": "2026-06-22T02:43:06.812491+00:00",
+  "generated_at_display": "June 22, 2026 at 02:43 AM UTC",
   "summary": {
     "total_trades": 28,
     "won": 5,
@@ -21,57 +21,18 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 2,
+    "trades": 0,
     "won": 0,
-    "lost": 2,
+    "lost": 0,
     "open": 0,
     "void": 0,
     "win_rate": 0.0,
-    "invested": 104.72,
-    "profit": -104.72,
-    "payout": 0.0,
-    "roi": -100.0,
-    "avg_bet": 52.36,
-    "trades_list": [
-      {
-        "ticker": "KXNHLGOAL-26JUN14CARVGK-VGKMMARNER93-1",
-        "side": "yes",
-        "sport": "NHL",
-        "bet_type": "Prop",
-        "count": 25.88,
-        "price_dollars": 0.37,
-        "cost": 9.58,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -9.58,
-        "net_contracts": 25.88,
-        "outcome_status": "lost",
-        "trade_date": "2026-06-15T00:25:36.400474+00:00",
-        "month": "Jun 2026",
-        "month_sort": "2026-06"
-      },
-      {
-        "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S20268957C0A37B3-63E252CA515",
-        "side": "yes",
-        "sport": "Esports",
-        "bet_type": "Parlay",
-        "count": 352.36,
-        "price_dollars": 0.27,
-        "cost": 95.14,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -95.14,
-        "net_contracts": 352.36,
-        "outcome_status": "lost",
-        "trade_date": "2026-06-14T23:55:00.741425+00:00",
-        "month": "Jun 2026",
-        "month_sort": "2026-06"
-      }
-    ]
+    "invested": 0,
+    "profit": 0,
+    "payout": 0,
+    "roi": 0.0,
+    "avg_bet": 0.0,
+    "trades_list": []
   },
   "open_trades": [],
   "by_sport": [
