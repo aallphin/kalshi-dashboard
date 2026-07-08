@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-07T19:39:26.044859+00:00",
-  "generated_at_display": "July 07, 2026 at 07:39 PM UTC",
+  "generated_at": "2026-07-08T01:42:52.868227+00:00",
+  "generated_at_display": "July 08, 2026 at 01:42 AM UTC",
   "summary": {
     "total_trades": 19,
     "won": 5,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 5,
-    "won": 3,
+    "trades": 4,
+    "won": 2,
     "lost": 2,
     "open": 0,
     "void": 0,
-    "win_rate": 60.0,
-    "invested": 172.87,
-    "profit": 25.01,
-    "payout": 197.88,
-    "roi": 14.5,
-    "avg_bet": 34.57,
+    "win_rate": 50.0,
+    "invested": 153.36,
+    "profit": 14.04,
+    "payout": 167.4,
+    "roi": 9.2,
+    "avg_bet": 38.34,
     "trades_list": [
       {
         "ticker": "KXWCADVANCE-26JUL05MEXENG-MEX",
@@ -106,25 +106,6 @@
         "net_contracts": 49.18,
         "outcome_status": "won",
         "trade_date": "2026-07-01T20:29:25.311759+00:00",
-        "month": "Jul 2026",
-        "month_sort": "2026-07"
-      },
-      {
-        "ticker": "KXWCADVANCE-26JUN30MEXECU-MEX",
-        "side": "yes",
-        "sport": "Other",
-        "bet_type": "Other",
-        "count": 30.48,
-        "price_dollars": 0.64,
-        "cost": 19.51,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 30.48,
-        "payout": 30.48,
-        "profit": 10.97,
-        "net_contracts": 30.48,
-        "outcome_status": "won",
-        "trade_date": "2026-07-01T01:30:39.868266+00:00",
         "month": "Jul 2026",
         "month_sort": "2026-07"
       }
