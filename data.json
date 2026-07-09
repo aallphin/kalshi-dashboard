@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-09T14:28:50.107081+00:00",
-  "generated_at_display": "July 09, 2026 at 02:28 PM UTC",
+  "generated_at": "2026-07-09T19:20:56.651623+00:00",
+  "generated_at_display": "July 09, 2026 at 07:20 PM UTC",
   "summary": {
     "total_trades": 17,
     "won": 5,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 2,
+    "trades": 1,
     "won": 0,
-    "lost": 2,
+    "lost": 1,
     "open": 0,
     "void": 0,
     "win_rate": 0.0,
-    "invested": 76.25,
-    "profit": -76.25,
+    "invested": 38.15,
+    "profit": -38.15,
     "payout": 0.0,
     "roi": -100.0,
-    "avg_bet": 38.12,
+    "avg_bet": 38.15,
     "trades_list": [
       {
         "ticker": "KXWCADVANCE-26JUL05MEXENG-MEX",
@@ -49,25 +49,6 @@
         "net_contracts": 123.08,
         "outcome_status": "lost",
         "trade_date": "2026-07-06T02:03:27.761318+00:00",
-        "month": "Jul 2026",
-        "month_sort": "2026-07"
-      },
-      {
-        "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S20269CFBDAAEC2E-0DA4555445B",
-        "side": "yes",
-        "sport": "Esports",
-        "bet_type": "Parlay",
-        "count": 130.03,
-        "price_dollars": 0.293,
-        "cost": 38.1,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -38.1,
-        "net_contracts": 130.03,
-        "outcome_status": "lost",
-        "trade_date": "2026-07-02T18:47:55.029934+00:00",
         "month": "Jul 2026",
         "month_sort": "2026-07"
       }
