@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-13T01:46:42.142803+00:00",
-  "generated_at_display": "July 13, 2026 at 01:46 AM UTC",
+  "generated_at": "2026-07-13T08:46:26.792610+00:00",
+  "generated_at_display": "July 13, 2026 at 08:46 AM UTC",
   "summary": {
     "total_trades": 17,
     "won": 5,
@@ -21,38 +21,18 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 1,
+    "trades": 0,
     "won": 0,
-    "lost": 1,
+    "lost": 0,
     "open": 0,
     "void": 0,
     "win_rate": 0.0,
-    "invested": 38.15,
-    "profit": -38.15,
-    "payout": 0.0,
-    "roi": -100.0,
-    "avg_bet": 38.15,
-    "trades_list": [
-      {
-        "ticker": "KXWCADVANCE-26JUL05MEXENG-MEX",
-        "side": "yes",
-        "sport": "Other",
-        "bet_type": "Other",
-        "count": 123.08,
-        "price_dollars": 0.31,
-        "cost": 38.15,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -38.15,
-        "net_contracts": 123.08,
-        "outcome_status": "lost",
-        "trade_date": "2026-07-06T02:03:27.761318+00:00",
-        "month": "Jul 2026",
-        "month_sort": "2026-07"
-      }
-    ]
+    "invested": 0,
+    "profit": 0,
+    "payout": 0,
+    "roi": 0.0,
+    "avg_bet": 0.0,
+    "trades_list": []
   },
   "open_trades": [],
   "by_sport": [
