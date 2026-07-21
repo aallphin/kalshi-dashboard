@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-21T13:14:46.849414+00:00",
-  "generated_at_display": "July 21, 2026 at 01:14 PM UTC",
+  "generated_at": "2026-07-21T19:02:16.409297+00:00",
+  "generated_at_display": "July 21, 2026 at 07:02 PM UTC",
   "summary": {
     "total_trades": 17,
     "won": 5,
@@ -21,38 +21,18 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 1,
+    "trades": 0,
     "won": 0,
-    "lost": 1,
+    "lost": 0,
     "open": 0,
     "void": 0,
     "win_rate": 0.0,
-    "invested": 37.83,
-    "profit": -37.83,
-    "payout": 0.0,
-    "roi": -100.0,
-    "avg_bet": 37.83,
-    "trades_list": [
-      {
-        "ticker": "KXWCSPREAD-26JUL14FRAESP-FRA2",
-        "side": "yes",
-        "sport": "Other",
-        "bet_type": "Spread",
-        "count": 210.15,
-        "price_dollars": 0.18,
-        "cost": 37.83,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -37.83,
-        "net_contracts": 210.15,
-        "outcome_status": "lost",
-        "trade_date": "2026-07-14T18:37:02.017216+00:00",
-        "month": "Jul 2026",
-        "month_sort": "2026-07"
-      }
-    ]
+    "invested": 0,
+    "profit": 0,
+    "payout": 0,
+    "roi": 0.0,
+    "avg_bet": 0.0,
+    "trades_list": []
   },
   "open_trades": [],
   "by_sport": [
