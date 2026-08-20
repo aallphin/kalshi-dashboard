@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-08-20T06:25:28.713251+00:00",
-  "generated_at_display": "August 20, 2026 at 06:25 AM UTC",
+  "generated_at": "2026-08-20T12:24:10.065071+00:00",
+  "generated_at_display": "August 20, 2026 at 12:24 PM UTC",
   "summary": {
-    "total_trades": 8,
+    "total_trades": 7,
     "won": 3,
-    "lost": 5,
+    "lost": 4,
     "open": 0,
     "void": 0,
-    "win_rate": 37.5,
-    "settled_invested": 315.42,
+    "win_rate": 42.9,
+    "settled_invested": 220.28,
     "settled_payout": 197.88,
-    "settled_profit": -117.54,
-    "settled_roi": -37.3,
+    "settled_profit": -22.4,
+    "settled_roi": -10.2,
     "open_exposure": 0,
-    "total_invested": 315.42,
+    "total_invested": 220.28,
     "total_payout": 197.88,
-    "total_profit": -117.54,
-    "roi": -37.3,
-    "avg_bet": 39.43,
+    "total_profit": -22.4,
+    "roi": -10.2,
+    "avg_bet": 31.47,
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
@@ -183,17 +183,17 @@
       ]
     },
     {
-      "trades": 2,
+      "trades": 1,
       "won": 0,
-      "lost": 2,
+      "lost": 1,
       "open": 0,
       "void": 0,
       "win_rate": 0.0,
-      "invested": 133.24,
-      "profit": -133.24,
+      "invested": 38.1,
+      "profit": -38.1,
       "payout": 0.0,
       "roi": -100.0,
-      "avg_bet": 66.62,
+      "avg_bet": 38.1,
       "sport": "Esports",
       "trades_list": [
         {
@@ -214,25 +214,6 @@
           "trade_date": "2026-07-02T18:47:55.029934+00:00",
           "month": "Jul 2026",
           "month_sort": "2026-07"
-        },
-        {
-          "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S20268957C0A37B3-63E252CA515",
-          "side": "yes",
-          "sport": "Esports",
-          "bet_type": "Parlay",
-          "count": 352.36,
-          "price_dollars": 0.27,
-          "cost": 95.14,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -95.14,
-          "net_contracts": 352.36,
-          "outcome_status": "lost",
-          "trade_date": "2026-06-14T23:55:00.741425+00:00",
-          "month": "Jun 2026",
-          "month_sort": "2026-06"
         }
       ]
     }
@@ -401,17 +382,17 @@
       ]
     },
     {
-      "trades": 2,
+      "trades": 1,
       "won": 0,
-      "lost": 2,
+      "lost": 1,
       "open": 0,
       "void": 0,
       "win_rate": 0.0,
-      "invested": 133.24,
-      "profit": -133.24,
+      "invested": 38.1,
+      "profit": -38.1,
       "payout": 0.0,
       "roi": -100.0,
-      "avg_bet": 66.62,
+      "avg_bet": 38.1,
       "bet_type": "Parlay",
       "trades_list": [
         {
@@ -432,42 +413,23 @@
           "trade_date": "2026-07-02T18:47:55.029934+00:00",
           "month": "Jul 2026",
           "month_sort": "2026-07"
-        },
-        {
-          "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S20268957C0A37B3-63E252CA515",
-          "side": "yes",
-          "sport": "Esports",
-          "bet_type": "Parlay",
-          "count": 352.36,
-          "price_dollars": 0.27,
-          "cost": 95.14,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -95.14,
-          "net_contracts": 352.36,
-          "outcome_status": "lost",
-          "trade_date": "2026-06-14T23:55:00.741425+00:00",
-          "month": "Jun 2026",
-          "month_sort": "2026-06"
         }
       ]
     }
   ],
   "by_month": [
     {
-      "trades": 2,
+      "trades": 1,
       "won": 0,
-      "lost": 2,
+      "lost": 1,
       "open": 0,
       "void": 0,
       "win_rate": 0.0,
-      "invested": 104.72,
-      "profit": -104.72,
+      "invested": 9.58,
+      "profit": -9.58,
       "payout": 0.0,
       "roi": -100.0,
-      "avg_bet": 52.36,
+      "avg_bet": 9.58,
       "month_sort": "2026-06",
       "month": "Jun 2026",
       "trades_list": [
@@ -487,25 +449,6 @@
           "net_contracts": 25.88,
           "outcome_status": "lost",
           "trade_date": "2026-06-15T00:25:36.400474+00:00",
-          "month": "Jun 2026",
-          "month_sort": "2026-06"
-        },
-        {
-          "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S20268957C0A37B3-63E252CA515",
-          "side": "yes",
-          "sport": "Esports",
-          "bet_type": "Parlay",
-          "count": 352.36,
-          "price_dollars": 0.27,
-          "cost": 95.14,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -95.14,
-          "net_contracts": 352.36,
-          "outcome_status": "lost",
-          "trade_date": "2026-06-14T23:55:00.741425+00:00",
           "month": "Jun 2026",
           "month_sort": "2026-06"
         }
@@ -774,25 +717,6 @@
       "net_contracts": 25.88,
       "outcome_status": "lost",
       "trade_date": "2026-06-15T00:25:36.400474+00:00",
-      "month": "Jun 2026",
-      "month_sort": "2026-06"
-    },
-    {
-      "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S20268957C0A37B3-63E252CA515",
-      "side": "yes",
-      "sport": "Esports",
-      "bet_type": "Parlay",
-      "count": 352.36,
-      "price_dollars": 0.27,
-      "cost": 95.14,
-      "fills_count": 1,
-      "sell_proceeds": 0.0,
-      "settle_payout": 0.0,
-      "payout": 0.0,
-      "profit": -95.14,
-      "net_contracts": 352.36,
-      "outcome_status": "lost",
-      "trade_date": "2026-06-14T23:55:00.741425+00:00",
       "month": "Jun 2026",
       "month_sort": "2026-06"
     }
