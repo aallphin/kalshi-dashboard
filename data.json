@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-08-22T06:20:25.269019+00:00",
-  "generated_at_display": "August 22, 2026 at 06:20 AM UTC",
+  "generated_at": "2026-08-22T12:17:00.514371+00:00",
+  "generated_at_display": "August 22, 2026 at 12:17 PM UTC",
   "summary": {
-    "total_trades": 7,
+    "total_trades": 6,
     "won": 3,
-    "lost": 4,
+    "lost": 3,
     "open": 0,
     "void": 0,
-    "win_rate": 42.9,
-    "settled_invested": 220.28,
+    "win_rate": 50.0,
+    "settled_invested": 210.7,
     "settled_payout": 197.88,
-    "settled_profit": -22.4,
-    "settled_roi": -10.2,
+    "settled_profit": -12.82,
+    "settled_roi": -6.1,
     "open_exposure": 0,
-    "total_invested": 220.28,
+    "total_invested": 210.7,
     "total_payout": 197.88,
-    "total_profit": -22.4,
-    "roi": -10.2,
-    "avg_bet": 31.47,
+    "total_profit": -12.82,
+    "roi": -6.1,
+    "avg_bet": 35.12,
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
@@ -144,41 +144,6 @@
           "trade_date": "2026-07-01T01:30:39.868266+00:00",
           "month": "Jul 2026",
           "month_sort": "2026-07"
-        }
-      ]
-    },
-    {
-      "trades": 1,
-      "won": 0,
-      "lost": 1,
-      "open": 0,
-      "void": 0,
-      "win_rate": 0.0,
-      "invested": 9.58,
-      "profit": -9.58,
-      "payout": 0.0,
-      "roi": -100.0,
-      "avg_bet": 9.58,
-      "sport": "NHL",
-      "trades_list": [
-        {
-          "ticker": "KXNHLGOAL-26JUN14CARVGK-VGKMMARNER93-1",
-          "side": "yes",
-          "sport": "NHL",
-          "bet_type": "Prop",
-          "count": 25.88,
-          "price_dollars": 0.37,
-          "cost": 9.58,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -9.58,
-          "net_contracts": 25.88,
-          "outcome_status": "lost",
-          "trade_date": "2026-06-15T00:25:36.400474+00:00",
-          "month": "Jun 2026",
-          "month_sort": "2026-06"
         }
       ]
     },
@@ -353,41 +318,6 @@
       "open": 0,
       "void": 0,
       "win_rate": 0.0,
-      "invested": 9.58,
-      "profit": -9.58,
-      "payout": 0.0,
-      "roi": -100.0,
-      "avg_bet": 9.58,
-      "bet_type": "Prop",
-      "trades_list": [
-        {
-          "ticker": "KXNHLGOAL-26JUN14CARVGK-VGKMMARNER93-1",
-          "side": "yes",
-          "sport": "NHL",
-          "bet_type": "Prop",
-          "count": 25.88,
-          "price_dollars": 0.37,
-          "cost": 9.58,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -9.58,
-          "net_contracts": 25.88,
-          "outcome_status": "lost",
-          "trade_date": "2026-06-15T00:25:36.400474+00:00",
-          "month": "Jun 2026",
-          "month_sort": "2026-06"
-        }
-      ]
-    },
-    {
-      "trades": 1,
-      "won": 0,
-      "lost": 1,
-      "open": 0,
-      "void": 0,
-      "win_rate": 0.0,
       "invested": 38.1,
       "profit": -38.1,
       "payout": 0.0,
@@ -418,42 +348,6 @@
     }
   ],
   "by_month": [
-    {
-      "trades": 1,
-      "won": 0,
-      "lost": 1,
-      "open": 0,
-      "void": 0,
-      "win_rate": 0.0,
-      "invested": 9.58,
-      "profit": -9.58,
-      "payout": 0.0,
-      "roi": -100.0,
-      "avg_bet": 9.58,
-      "month_sort": "2026-06",
-      "month": "Jun 2026",
-      "trades_list": [
-        {
-          "ticker": "KXNHLGOAL-26JUN14CARVGK-VGKMMARNER93-1",
-          "side": "yes",
-          "sport": "NHL",
-          "bet_type": "Prop",
-          "count": 25.88,
-          "price_dollars": 0.37,
-          "cost": 9.58,
-          "fills_count": 1,
-          "sell_proceeds": 0.0,
-          "settle_payout": 0.0,
-          "payout": 0.0,
-          "profit": -9.58,
-          "net_contracts": 25.88,
-          "outcome_status": "lost",
-          "trade_date": "2026-06-15T00:25:36.400474+00:00",
-          "month": "Jun 2026",
-          "month_sort": "2026-06"
-        }
-      ]
-    },
     {
       "trades": 6,
       "won": 3,
@@ -700,25 +594,6 @@
       "trade_date": "2026-07-01T01:30:39.868266+00:00",
       "month": "Jul 2026",
       "month_sort": "2026-07"
-    },
-    {
-      "ticker": "KXNHLGOAL-26JUN14CARVGK-VGKMMARNER93-1",
-      "side": "yes",
-      "sport": "NHL",
-      "bet_type": "Prop",
-      "count": 25.88,
-      "price_dollars": 0.37,
-      "cost": 9.58,
-      "fills_count": 1,
-      "sell_proceeds": 0.0,
-      "settle_payout": 0.0,
-      "payout": 0.0,
-      "profit": -9.58,
-      "net_contracts": 25.88,
-      "outcome_status": "lost",
-      "trade_date": "2026-06-15T00:25:36.400474+00:00",
-      "month": "Jun 2026",
-      "month_sort": "2026-06"
     }
   ]
 }
