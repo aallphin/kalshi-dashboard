@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-17T20:43:13.982990+00:00",
-  "generated_at_display": "September 17, 2026 at 08:43 PM UTC",
+  "generated_at": "2026-09-18T02:05:13.824186+00:00",
+  "generated_at_display": "September 18, 2026 at 02:05 AM UTC",
   "summary": {
     "total_trades": 13,
     "won": 4,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 9,
-    "won": 4,
+    "trades": 8,
+    "won": 3,
     "lost": 5,
     "open": 0,
     "void": 0,
-    "win_rate": 44.4,
-    "invested": 268.75,
-    "profit": -96.03,
-    "payout": 172.72,
-    "roi": -35.7,
-    "avg_bet": 29.86,
+    "win_rate": 37.5,
+    "invested": 244.82,
+    "profit": -138.56,
+    "payout": 106.26,
+    "roi": -56.6,
+    "avg_bet": 30.6,
     "trades_list": [
       {
         "ticker": "KXMVECROSSCATEGORY-SHARD1-S2026E7E074A23EC-9609D943A3D",
@@ -182,25 +182,6 @@
         "net_contracts": 53.48,
         "outcome_status": "lost",
         "trade_date": "2026-09-12T18:35:03.811544+00:00",
-        "month": "Sep 2026",
-        "month_sort": "2026-09"
-      },
-      {
-        "ticker": "KXNFLGAME-26SEP10SFLAR-SF",
-        "side": "yes",
-        "sport": "NFL",
-        "bet_type": "Moneyline",
-        "count": 66.46,
-        "price_dollars": 0.36,
-        "cost": 23.93,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 66.46,
-        "payout": 66.46,
-        "profit": 42.53,
-        "net_contracts": 66.46,
-        "outcome_status": "won",
-        "trade_date": "2026-09-10T23:07:03.035773+00:00",
         "month": "Sep 2026",
         "month_sort": "2026-09"
       }
