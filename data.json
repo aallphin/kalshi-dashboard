@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-19T14:59:58.885597+00:00",
-  "generated_at_display": "September 19, 2026 at 02:59 PM UTC",
+  "generated_at": "2026-09-19T19:44:41.998682+00:00",
+  "generated_at_display": "September 19, 2026 at 07:44 PM UTC",
   "summary": {
     "total_trades": 13,
     "won": 4,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 8,
+    "trades": 7,
     "won": 3,
-    "lost": 5,
+    "lost": 4,
     "open": 0,
     "void": 0,
-    "win_rate": 37.5,
-    "invested": 244.82,
-    "profit": -138.56,
+    "win_rate": 42.9,
+    "invested": 220.75,
+    "profit": -114.49,
     "payout": 106.26,
-    "roi": -56.6,
-    "avg_bet": 30.6,
+    "roi": -51.9,
+    "avg_bet": 31.54,
     "trades_list": [
       {
         "ticker": "KXMVECROSSCATEGORY-SHARD1-S2026E7E074A23EC-9609D943A3D",
@@ -163,25 +163,6 @@
         "net_contracts": 33.61,
         "outcome_status": "won",
         "trade_date": "2026-09-13T16:38:52.600753+00:00",
-        "month": "Sep 2026",
-        "month_sort": "2026-09"
-      },
-      {
-        "ticker": "KXMVECROSSCATEGORY-SHARD1-S202638DFED95516-15D6992AAD5",
-        "side": "yes",
-        "sport": "Multi-Sport",
-        "bet_type": "Cross-Category Parlay",
-        "count": 53.48,
-        "price_dollars": 0.45,
-        "cost": 24.07,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 0.0,
-        "payout": 0.0,
-        "profit": -24.07,
-        "net_contracts": 53.48,
-        "outcome_status": "lost",
-        "trade_date": "2026-09-12T18:35:03.811544+00:00",
         "month": "Sep 2026",
         "month_sort": "2026-09"
       }
