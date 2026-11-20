@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-19T23:59:39.373001+00:00",
-  "generated_at_display": "November 19, 2026 at 11:59 PM UTC",
+  "generated_at": "2026-11-20T06:07:46.127962+00:00",
+  "generated_at_display": "November 20, 2026 at 06:07 AM UTC",
   "summary": {
     "total_trades": 15,
     "won": 6,
@@ -21,17 +21,17 @@
     "fees_note": "Trading fees are not yet subtracted from P/L."
   },
   "recent_7_days": {
-    "trades": 6,
-    "won": 3,
+    "trades": 5,
+    "won": 2,
     "lost": 3,
     "open": 0,
     "void": 0,
-    "win_rate": 50.0,
-    "invested": 128.61,
-    "profit": 52.88,
-    "payout": 181.48,
-    "roi": 41.1,
-    "avg_bet": 21.43,
+    "win_rate": 40.0,
+    "invested": 99.76,
+    "profit": 14.64,
+    "payout": 114.39,
+    "roi": 14.7,
+    "avg_bet": 19.95,
     "trades_list": [
       {
         "ticker": "KXMVECROSSCATEGORY-S2026AFIXUJ2QPDCRVEP7-WGSYJOTP4",
@@ -125,25 +125,6 @@
         "net_contracts": 72.5,
         "outcome_status": "won",
         "trade_date": "2026-11-14T21:53:38.541250+00:00",
-        "month": "Nov 2026",
-        "month_sort": "2026-11"
-      },
-      {
-        "ticker": "KXNFLSPREAD-26NOV12WASNYG-WAS3",
-        "side": "yes",
-        "sport": "NFL",
-        "bet_type": "Spread",
-        "count": 67.09,
-        "price_dollars": 0.43,
-        "cost": 28.85,
-        "fills_count": 1,
-        "sell_proceeds": 0.0,
-        "settle_payout": 67.09,
-        "payout": 67.09,
-        "profit": 38.24,
-        "net_contracts": 67.09,
-        "outcome_status": "won",
-        "trade_date": "2026-11-13T01:16:49.071082+00:00",
         "month": "Nov 2026",
         "month_sort": "2026-11"
       }
